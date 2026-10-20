@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spelling Bee Practice</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#243047;background:#f8f6ed}*{box-sizing:border-box}body{margin:0;padding:28px 16px}.app{max-width:640px;margin:0 auto}.header{text-align:center;margin-bottom:22px}.bee{font-size:48px}.header h1{margin:4px 0 6px;font-size:30px}.muted{color:#667085}.card{background:white;border:1px solid #e6e3d9;border-radius:20px;padding:24px;box-shadow:0 10px 30px #2430470b}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.control{flex:1;min-width:140px}label{display:block;font-weight:650;font-size:13px;margin-bottom:7px}select,input{width:100%;background:white;border:1px solid #ccd2dd;border-radius:11px;padding:13px;font:inherit;color:#243047}button{cursor:pointer;border:0;border-radius:11px;padding:13px 18px;font:inherit;font-weight:700}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:#f2b730;color:#272414}.secondary{background:#edf1f7;color:#243047}.judge{background:#fff8db;border-radius:16px;text-align:center;margin:22px 0;padding:22px 14px;min-height:175px;display:flex;flex-direction:column;justify-content:center;gap:10px}.judge h2{font-size:17px;margin:0}.spoken{font-size:20px;font-weight:750}.hint{min-height:42px;line-height:1.45}.controls2{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.answerrow{display:flex;gap:10px}.answerrow input{min-width:0;flex:1}.status{min-height:28px;font-weight:700;margin-top:14px}.good{color:#167249}.bad{color:#b23a3a}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:15px;font-size:14px;color:#667085}.finish{background:#f0faf4;border:1px solid #a8d8bd;border-radius:12px;padding:16px;margin-top:14px;line-height:1.6}.small{font-size:12px;color:#667085;line-height:1.5;margin-top:16px}@media(max-width:430px){.card{padding:16px}.answerrow{flex-direction:column}.controls2 button{flex:1}}
+</style>
+</head>
+<body><main class="app">
+<header class="header"><div class="bee" aria-hidden="true">🐝</div><h1>Spelling Bee Practice</h1><div class="muted">Listen carefully, then type what you hear. The word stays hidden until you submit an answer.</div></header>
+<section class="card">
+<div class="controls"><div class="control"><label for="group">Competition group</label><select id="group"><option value="B">Group B · Grades 3–4</option><option value="C">Group C · Grades 5–6</option></select></div><div class="control"><label for="speed">Speaking speed</label><select id="speed"><option value="0.7">Slow</option><option value="0.85" selected>Normal practice</option><option value="1">Regular</option></select></div></div>
+<div class="controls" style="margin-top:12px"><div class="control"><label for="mode">Practice mode</label><select id="mode"><option value="practice">Unlimited practice</option><option value="simulation">Competition simulation · 25 words</option></select></div><div class="control"><label for="pauseLength">Pause between readings</label><select id="pauseLength"><option value="2000" selected>2 seconds</option><option value="3000">3 seconds</option><option value="4000">4 seconds</option></select></div></div>
+<div class="controls" style="margin-top:12px"><div class="control"><label for="voice">Judge voice</label><select id="voice"><option value="male" selected>American male (preferred)</option><option value="female">American female</option><option value="any">American English (any)</option></select></div><div class="control"><label>Voice available</label><div class="muted" id="voice-status" style="font-size:13px;padding:11px 0">Checking device voices…</div></div></div>
+<div class="controls" style="margin-top:12px"><div class="control" style="min-width:100%"><label for="specificvoice">Actual voice on your device</label><select id="specificvoice"><option value="auto">Automatically choose best available</option></select></div></div>
+<div class="meta"><span id="question">Question 1</span><span id="score">Score: 0 / 0</span></div><div id="mode-note" class="small" style="margin-top:5px">Unlimited practice: the full source-based word bank, shuffled.</div>
+<div class="judge" aria-live="polite"><h2>Judge</h2><div class="spoken" id="spoken">Press “Hear the judge”</div><div class="hint" id="hint">The judge will say the word, pause for 2 seconds, say a sentence, pause for 2 seconds, then repeat the word.</div></div>
+<div class="small" id="bankinfo" style="margin-top:14px"></div><div class="controls2"><button class="primary" id="hear" type="button">🔊 Hear the judge</button><button class="secondary" id="repeat" type="button">↻ Repeat</button></div>
+<form id="form"><label for="answer">Type the word you hear</label><div class="answerrow"><input id="answer" type="text" placeholder="Type the word here…" autocomplete="off" autocapitalize="off" spellcheck="false" required><button class="primary" type="submit" id="check">Check spelling</button></div></form>
+<div class="status" id="status" role="status"></div><div id="finish" class="finish" hidden></div>
+<div class="controls2"><button class="secondary" type="button" id="next">Next word →</button><button class="secondary" type="button" id="reset">Start over</button></div>
+<div class="small">Sources: <a href="https://english1.co.id/blog/persiapan-akademik/contoh-soal-spelling-bee/" target="_blank" rel="noopener">English 1 sample words (September 2026)</a> and <a href="https://www.spellingbee.org.ro/2026_Spelling_Bee_Word_Lists_Final.pdf" target="_blank" rel="noopener">2026 grade-based competition vocabulary (separate Romanian competition)</a>. Sentences were written for this app and are not official judge scripts. The banks are not official English 1 competition word lists. Words are kept hidden until an incorrect first answer; the first answer counts toward the score. Choose a natural voice if your device offers one. Practice cycles through all words; simulation uses 25 randomly selected words.</div>
+</section></main>
+<script>
+const banks={
+ "B": [
+  [
+   "green",
+   "The leaves turn green after the rain.",
+   "English 1 examples"
+  ],
+  [
+   "happy",
+   "The children were happy to see their friends.",
+   "English 1 examples"
+  ],
+  [
+   "clean",
+   "Please keep the classroom clean.",
+   "English 1 examples"
+  ],
+  [
+   "school",
+   "We walk to school every morning.",
+   "English 1 examples"
+  ],
+  [
+   "teacher",
+   "Our teacher reads us a story.",
+   "English 1 examples"
+  ],
+  [
+   "beautiful",
+   "The flowers look beautiful today.",
+   "English 1 examples"
+  ],
+  [
+   "little",
+   "A little kitten slept in the basket.",
+   "English 1 examples"
+  ],
+  [
+   "kitchen",
+   "My father cooks dinner in the kitchen.",
+   "English 1 examples"
+  ],
+  [
+   "knock",
+   "Please knock before opening the door.",
+   "English 1 examples"
+  ],
+  [
+   "bright",
+   "The bright sun warmed the garden.",
+   "English 1 examples"
+  ],
+  [
+   "rainbow",
+   "After the rain, we can see a rainbow.",
+   "2026 grade list"
+  ],
+  [
+   "library",
+   "We borrow books from the library.",
+   "2026 grade list"
+  ],
+  [
+   "elephant",
+   "The elephant used its trunk to drink.",
+   "2026 grade list"
+  ],
+  [
+   "mountain",
+   "Clouds covered the top of the mountain.",
+   "2026 grade list"
+  ],
+  [
+   "mysterious",
+   "We heard a mysterious sound at night.",
+   "2026 grade list"
+  ],
+  [
+   "whisper",
+   "Please whisper inside the library.",
+   "2026 grade list"
+  ],
+  [
+   "thunder",
+   "Loud thunder woke the sleeping dog.",
+   "2026 grade list"
+  ],
+  [
+   "meadow",
+   "Flowers grew across the meadow.",
+   "2026 grade list"
+  ],
+  [
+   "pillow",
+   "She rested her head on the pillow.",
+   "2026 grade list"
+  ],
+  [
+   "creature",
+   "A tiny creature crawled under the leaf.",
+   "2026 grade list"
+  ],
+  [
+   "freezer",
+   "We keep ice cream in the freezer.",
+   "2026 grade list"
+  ],
+  [
+   "measure",
+   "Use a ruler to measure the table.",
+   "2026 grade list"
+  ],
+  [
+   "playground",
+   "Children ran across the playground.",
+   "2026 grade list"
+  ],
+  [
+   "toothbrush",
+   "I packed my toothbrush for the trip.",
+   "2026 grade list"
+  ],
+  [
+   "sunflower",
+   "The sunflower turned toward the sunlight.",
+   "2026 grade list"
+  ],
+  [
+   "notebook",
+   "He drew a picture in his notebook.",
+   "2026 grade list"
+  ],
+  [
+   "weekend",
+   "We visited our cousins over the weekend.",
+   "2026 grade list"
+  ],
+  [
+   "waterfall",
+   "The waterfall flowed over the rocks.",
+   "2026 grade list"
+  ],
+  [
+   "backpack",
+   "Her backpack held three books.",
+   "2026 grade list"
+  ],
+  [
+   "artist",
+   "The artist painted a picture.",
+   "2026 grade list"
+  ],
+  [
+   "farmer",
+   "The farmer planted rice in the field.",
+   "2026 grade list"
+  ],
+  [
+   "painter",
+   "The painter used a small brush.",
+   "2026 grade list"
+  ],
+  [
+   "forest",
+   "A deer walked through the forest.",
+   "2026 grade list"
+  ],
+  [
+   "village",
+   "My grandparents live in a quiet village.",
+   "2026 grade list"
+  ],
+  [
+   "island",
+   "We traveled by boat to the island.",
+   "2026 grade list"
+  ],
+  [
+   "desert",
+   "The desert was hot and dry.",
+   "2026 grade list"
+  ],
+  [
+   "ocean",
+   "The boat sailed across the ocean.",
+   "2026 grade list"
+  ],
+  [
+   "valley",
+   "A river runs through the valley.",
+   "2026 grade list"
+  ],
+  [
+   "museum",
+   "We saw old paintings in the museum.",
+   "2026 grade list"
+  ],
+  [
+   "hospital",
+   "The doctor works at the hospital.",
+   "2026 grade list"
+  ],
+  [
+   "restaurant",
+   "Our family ate at the restaurant.",
+   "2026 grade list"
+  ],
+  [
+   "giraffe",
+   "The giraffe reached the tall leaves.",
+   "2026 grade list"
+  ],
+  [
+   "penguin",
+   "The penguin waddled across the ice.",
+   "2026 grade list"
+  ],
+  [
+   "rabbit",
+   "The rabbit hid behind a tree.",
+   "2026 grade list"
+  ],
+  [
+   "turtle",
+   "The turtle moved slowly on the sand.",
+   "2026 grade list"
+  ],
+  [
+   "friendly",
+   "Our new neighbor is very friendly.",
+   "2026 grade list"
+  ],
+  [
+   "careful",
+   "Be careful when crossing the road.",
+   "2026 grade list"
+  ],
+  [
+   "helpful",
+   "Her helpful advice made the task easier.",
+   "2026 grade list"
+  ],
+  [
+   "playful",
+   "The playful puppy chased a ball.",
+   "2026 grade list"
+  ],
+  [
+   "thankful",
+   "I am thankful for your help.",
+   "2026 grade list"
+  ],
+  [
+   "graceful",
+   "The dancer made a graceful turn.",
+   "2026 grade list"
+  ],
+  [
+   "wonderful",
+   "We had a wonderful day at the beach.",
+   "2026 grade list"
+  ],
+  [
+   "curious",
+   "The curious child asked many questions.",
+   "2026 grade list"
+  ],
+  [
+   "exciting",
+   "The exciting game ended with a goal.",
+   "2026 grade list"
+  ],
+  [
+   "powerful",
+   "The powerful wind shook the trees.",
+   "2026 grade list"
+  ],
+  [
+   "favorite",
+   "Mango is my favorite fruit.",
+   "2026 grade list"
+  ],
+  [
+   "excellent",
+   "She did an excellent job on the project.",
+   "2026 grade list"
+  ],
+  [
+   "question",
+   "The student asked a question.",
+   "2026 grade list"
+  ],
+  [
+   "sentence",
+   "Please write a sentence in your notebook.",
+   "2026 grade list"
+  ],
+  [
+   "answer",
+   "He wrote his answer on the paper.",
+   "2026 grade list"
+  ],
+  [
+   "problem",
+   "We solved the problem together.",
+   "2026 grade list"
+  ],
+  [
+   "special",
+   "Today is a special day for our family.",
+   "2026 grade list"
+  ],
+  [
+   "tomorrow",
+   "We will go swimming tomorrow.",
+   "2026 grade list"
+  ],
+  [
+   "yesterday",
+   "It rained all day yesterday.",
+   "2026 grade list"
+  ],
+  [
+   "travel",
+   "We travel by train to the city.",
+   "2026 grade list"
+  ],
+  [
+   "bicycle",
+   "He rides his bicycle to the park.",
+   "2026 grade list"
+  ],
+  [
+   "triangle",
+   "A triangle has three sides.",
+   "2026 grade list"
+  ],
+  [
+   "together",
+   "We worked together to finish the poster.",
+   "2026 grade list"
+  ],
+  [
+   "interesting",
+   "The science lesson was interesting.",
+   "2026 grade list"
+  ],
+  [
+   "difficult",
+   "The final puzzle was difficult.",
+   "2026 grade list"
+  ],
+  [
+   "activity",
+   "Drawing is my favorite afternoon activity.",
+   "2026 grade list"
+  ],
+  [
+   "service",
+   "The shop offers a delivery service.",
+   "2026 grade list"
+  ],
+  [
+   "gentle",
+   "A gentle breeze moved the leaves.",
+   "2026 grade list"
+  ],
+  [
+   "thought",
+   "She thought carefully before answering.",
+   "2026 grade list"
+  ],
+  [
+   "brought",
+   "Dad brought snacks for the picnic.",
+   "2026 grade list"
+  ],
+  [
+   "through",
+   "We walked through the garden.",
+   "2026 grade list"
+  ],
+  [
+   "enough",
+   "We have enough water for everyone.",
+   "2026 grade list"
+  ],
+  [
+   "tough",
+   "The rope was strong and tough.",
+   "2026 grade list"
+  ],
+  [
+   "laugh",
+   "The funny joke made us laugh.",
+   "2026 grade list"
+  ],
+  [
+   "daughter",
+   "Their daughter is learning to swim.",
+   "2026 grade list"
+  ],
+  [
+   "circle",
+   "Draw a circle on the board.",
+   "2026 grade list"
+  ],
+  [
+   "square",
+   "Each side of the square is equal.",
+   "2026 grade list"
+  ],
+  [
+   "February",
+   "February comes after January.",
+   "2026 grade list"
+  ],
+  [
+   "Wednesday",
+   "Our music lesson is on Wednesday.",
+   "2026 grade list"
+  ],
+  [
+   "Thursday",
+   "We have football practice on Thursday.",
+   "2026 grade list"
+  ],
+  [
+   "Saturday",
+   "We visit the market every Saturday.",
+   "2026 grade list"
+  ],
+  [
+   "write",
+   "Please write your name clearly.",
+   "2026 grade list"
+  ],
+  [
+   "honest",
+   "An honest person tells the truth.",
+   "2026 grade list"
+  ],
+  [
+   "listen",
+   "Listen carefully to the instructions.",
+   "2026 grade list"
+  ],
+  [
+   "celebrate",
+   "We celebrate our school anniversary.",
+   "2026 grade list"
+  ],
+  [
+   "discovery",
+   "The discovery amazed the young explorer.",
+   "2026 grade list"
+  ],
+  [
+   "explorer",
+   "The explorer studied the map.",
+   "2026 grade list"
+  ],
+  [
+   "comfortable",
+   "The new chair is comfortable.",
+   "2026 grade list"
+  ],
+  [
+   "holiday",
+   "We visited our family during the holiday.",
+   "2026 grade list"
+  ],
+  [
+   "vacation",
+   "Our summer vacation was exciting.",
+   "2026 grade list"
+  ],
+  [
+   "whistle",
+   "The referee blew a whistle.",
+   "2026 grade list"
+  ],
+  [
+   "butterfly",
+   "A butterfly landed on a flower.",
+   "2026 grade list"
+  ],
+  [
+   "journey",
+   "The journey took three hours.",
+   "2026 grade list"
+  ],
+  [
+   "scientific",
+   "The students made a scientific observation.",
+   "2026 grade list"
+  ],
+  [
+   "believe",
+   "I believe we can finish on time.",
+   "2026 grade list"
+  ],
+  [
+   "receipt",
+   "Keep the receipt after buying the book.",
+   "2026 grade list"
+  ],
+  [
+   "neighbor",
+   "Our neighbor has a friendly cat.",
+   "2026 grade list"
+  ],
+  [
+   "business",
+   "My aunt runs a small business.",
+   "2026 grade list"
+  ],
+  [
+   "necessary",
+   "A helmet is necessary for safety.",
+   "2026 grade list"
+  ],
+  [
+   "separate",
+   "Please separate the paper from the plastic.",
+   "2026 grade list"
+  ],
+  [
+   "achieve",
+   "Hard work can help you achieve your goals.",
+   "2026 grade list"
+  ],
+  [
+   "straight",
+   "Draw a straight line across the page.",
+   "2026 grade list"
+  ],
+  [
+   "height",
+   "We measured the height of the wall.",
+   "2026 grade list"
+  ],
+  [
+   "weight",
+   "The nurse checked the baby’s weight.",
+   "2026 grade list"
+  ],
+  [
+   "weird",
+   "We heard a weird noise outside.",
+   "2026 grade list"
+  ],
+  [
+   "calendar",
+   "Mark the date on your calendar.",
+   "2026 grade list"
+  ],
+  [
+   "grammar",
+   "The teacher explained the grammar rule.",
+   "2026 grade list"
+  ],
+  [
+   "peculiar",
+   "The bird had a peculiar call.",
+   "2026 grade list"
+  ],
+  [
+   "familiar",
+   "Her voice sounded familiar.",
+   "2026 grade list"
+  ]
+ ],
+ "C": [
+  [
+   "different",
+   "The two paintings look different.",
+   "English 1 examples"
+  ],
+  [
+   "knowledge",
+   "Reading helps us develop knowledge.",
+   "English 1 examples"
+  ],
+  [
+   "adventure",
+   "The hike was a wonderful adventure.",
+   "English 1 examples"
+  ],
+  [
+   "important",
+   "It is important to listen carefully.",
+   "English 1 examples"
+  ],
+  [
+   "education",
+   "Education helps us discover new ideas.",
+   "English 1 examples"
+  ],
+  [
+   "happiness",
+   "Her smile showed her happiness.",
+   "English 1 examples"
+  ],
+  [
+   "beautiful",
+   "The flowers look beautiful today.",
+   "English 1 examples"
+  ],
+  [
+   "information",
+   "The poster gives information about the event.",
+   "English 1 examples"
+  ],
+  [
+   "competition",
+   "Our class entered a spelling competition.",
+   "English 1 examples"
+  ],
+  [
+   "environment",
+   "We must protect our environment.",
+   "English 1 examples"
+  ],
+  [
+   "apparent",
+   "It became apparent that the door was locked.",
+   "2026 grade list"
+  ],
+  [
+   "ancient",
+   "We visited the ruins of an ancient temple.",
+   "2026 grade list"
+  ],
+  [
+   "height",
+   "We measured the height of the wall.",
+   "2026 grade list"
+  ],
+  [
+   "admission",
+   "The museum offers free admission on Fridays.",
+   "2026 grade list"
+  ],
+  [
+   "permission",
+   "Ask for permission before leaving class.",
+   "2026 grade list"
+  ],
+  [
+   "motion",
+   "The teacher explained the motion of the planets.",
+   "2026 grade list"
+  ],
+  [
+   "vision",
+   "Good vision helps us read clearly.",
+   "2026 grade list"
+  ],
+  [
+   "decision",
+   "She made a decision after thinking carefully.",
+   "2026 grade list"
+  ],
+  [
+   "mission",
+   "Their mission was to clean the beach.",
+   "2026 grade list"
+  ],
+  [
+   "discussion",
+   "We had a discussion about the story.",
+   "2026 grade list"
+  ],
+  [
+   "attention",
+   "Pay attention to the instructions.",
+   "2026 grade list"
+  ],
+  [
+   "direction",
+   "The arrow points in the right direction.",
+   "2026 grade list"
+  ],
+  [
+   "instruction",
+   "Follow each instruction on the worksheet.",
+   "2026 grade list"
+  ],
+  [
+   "collection",
+   "He has a collection of stamps.",
+   "2026 grade list"
+  ],
+  [
+   "production",
+   "The factory increased its production of bicycles.",
+   "2026 grade list"
+  ],
+  [
+   "connection",
+   "The bridge provides a connection between the towns.",
+   "2026 grade list"
+  ],
+  [
+   "invention",
+   "The telephone was an important invention.",
+   "2026 grade list"
+  ],
+  [
+   "solution",
+   "We found a solution to the problem.",
+   "2026 grade list"
+  ],
+  [
+   "pollution",
+   "Air pollution can harm our health.",
+   "2026 grade list"
+  ],
+  [
+   "planet",
+   "Earth is the planet we live on.",
+   "2026 grade list"
+  ],
+  [
+   "galaxy",
+   "Our solar system is part of a galaxy.",
+   "2026 grade list"
+  ],
+  [
+   "universe",
+   "Scientists study the universe.",
+   "2026 grade list"
+  ],
+  [
+   "gravity",
+   "Gravity pulls objects toward the ground.",
+   "2026 grade list"
+  ],
+  [
+   "oxygen",
+   "People need oxygen to breathe.",
+   "2026 grade list"
+  ],
+  [
+   "element",
+   "Gold is a chemical element.",
+   "2026 grade list"
+  ],
+  [
+   "biology",
+   "Biology is the study of living things.",
+   "2026 grade list"
+  ],
+  [
+   "geography",
+   "We learned about rivers in geography.",
+   "2026 grade list"
+  ],
+  [
+   "chemistry",
+   "Chemistry helps explain how substances react.",
+   "2026 grade list"
+  ],
+  [
+   "physics",
+   "Physics explains the movement of objects.",
+   "2026 grade list"
+  ],
+  [
+   "astronomy",
+   "Astronomy studies stars and planets.",
+   "2026 grade list"
+  ],
+  [
+   "mathematics",
+   "Mathematics helps us solve number problems.",
+   "2026 grade list"
+  ],
+  [
+   "technology",
+   "Technology helps people communicate.",
+   "2026 grade list"
+  ],
+  [
+   "culture",
+   "Food is part of a community’s culture.",
+   "2026 grade list"
+  ],
+  [
+   "tradition",
+   "Singing together is our family tradition.",
+   "2026 grade list"
+  ],
+  [
+   "heritage",
+   "We learned about our cultural heritage.",
+   "2026 grade list"
+  ],
+  [
+   "identity",
+   "Each student has a unique identity.",
+   "2026 grade list"
+  ],
+  [
+   "community",
+   "Our community planted trees in the park.",
+   "2026 grade list"
+  ],
+  [
+   "society",
+   "People in a society follow shared rules.",
+   "2026 grade list"
+  ],
+  [
+   "government",
+   "The government built a new bridge.",
+   "2026 grade list"
+  ],
+  [
+   "democracy",
+   "In a democracy, citizens can vote.",
+   "2026 grade list"
+  ],
+  [
+   "itinerary",
+   "Our travel itinerary includes two museums.",
+   "2026 grade list"
+  ],
+  [
+   "souvenir",
+   "I bought a souvenir at the market.",
+   "2026 grade list"
+  ],
+  [
+   "destination",
+   "The train reached its destination.",
+   "2026 grade list"
+  ],
+  [
+   "expedition",
+   "The expedition crossed the mountains.",
+   "2026 grade list"
+  ],
+  [
+   "voyage",
+   "The ship began a long voyage.",
+   "2026 grade list"
+  ],
+  [
+   "discovery",
+   "The discovery amazed the young explorer.",
+   "2026 grade list"
+  ],
+  [
+   "navigation",
+   "The sailors used stars for navigation.",
+   "2026 grade list"
+  ],
+  [
+   "achieve",
+   "Hard work can help you achieve your goals.",
+   "2026 grade list"
+  ],
+  [
+   "succeed",
+   "Practice can help you succeed.",
+   "2026 grade list"
+  ],
+  [
+   "comfortable",
+   "The new chair is comfortable.",
+   "2026 grade list"
+  ],
+  [
+   "dangerous",
+   "Swimming in a storm is dangerous.",
+   "2026 grade list"
+  ],
+  [
+   "grateful",
+   "We were grateful for their kindness.",
+   "2026 grade list"
+  ],
+  [
+   "thoughtful",
+   "He wrote a thoughtful thank-you note.",
+   "2026 grade list"
+  ],
+  [
+   "serious",
+   "The doctor spoke in a serious voice.",
+   "2026 grade list"
+  ],
+  [
+   "although",
+   "Although it rained, we still played indoors.",
+   "2026 grade list"
+  ],
+  [
+   "however",
+   "The road was crowded; however, we arrived on time.",
+   "2026 grade list"
+  ],
+  [
+   "therefore",
+   "It was raining; therefore, we stayed inside.",
+   "2026 grade list"
+  ],
+  [
+   "business",
+   "My aunt runs a small business.",
+   "2026 grade list"
+  ],
+  [
+   "taught",
+   "Our teacher taught us a new song.",
+   "2026 grade list"
+  ],
+  [
+   "caught",
+   "The goalkeeper caught the ball.",
+   "2026 grade list"
+  ],
+  [
+   "future",
+   "She hopes to become a scientist in the future.",
+   "2026 grade list"
+  ],
+  [
+   "cylinder",
+   "The can has the shape of a cylinder.",
+   "2026 grade list"
+  ],
+  [
+   "sphere",
+   "A ball is shaped like a sphere.",
+   "2026 grade list"
+  ],
+  [
+   "pyramid",
+   "We made a model of a pyramid.",
+   "2026 grade list"
+  ],
+  [
+   "magnificent",
+   "The magnificent palace stood beside the river.",
+   "2026 grade list"
+  ],
+  [
+   "courageous",
+   "The courageous rescuer helped the child.",
+   "2026 grade list"
+  ],
+  [
+   "mysterious",
+   "We heard a mysterious sound at night.",
+   "2026 grade list"
+  ],
+  [
+   "extraordinary",
+   "The student showed extraordinary talent.",
+   "2026 grade list"
+  ],
+  [
+   "remarkable",
+   "Her progress was remarkable.",
+   "2026 grade list"
+  ],
+  [
+   "curiosity",
+   "His curiosity led to many questions.",
+   "2026 grade list"
+  ],
+  [
+   "challenge",
+   "The difficult hike was a challenge.",
+   "2026 grade list"
+  ],
+  [
+   "pronunciation",
+   "We practiced the pronunciation of new words.",
+   "2026 grade list"
+  ],
+  [
+   "celebration",
+   "The celebration began with music.",
+   "2026 grade list"
+  ],
+  [
+   "cooperation",
+   "Teamwork requires cooperation.",
+   "2026 grade list"
+  ],
+  [
+   "organization",
+   "The organization provides books to schools.",
+   "2026 grade list"
+  ],
+  [
+   "achievement",
+   "Finishing the marathon was a great achievement.",
+   "2026 grade list"
+  ],
+  [
+   "opportunity",
+   "The trip gave us an opportunity to learn.",
+   "2026 grade list"
+  ],
+  [
+   "possibility",
+   "There is a possibility of rain tomorrow.",
+   "2026 grade list"
+  ],
+  [
+   "creativity",
+   "Painting helps develop creativity.",
+   "2026 grade list"
+  ],
+  [
+   "innovation",
+   "The new invention was an example of innovation.",
+   "2026 grade list"
+  ],
+  [
+   "determination",
+   "Her determination helped her finish the race.",
+   "2026 grade list"
+  ],
+  [
+   "confidence",
+   "Practice improved his confidence.",
+   "2026 grade list"
+  ],
+  [
+   "independence",
+   "The country celebrated its independence.",
+   "2026 grade list"
+  ],
+  [
+   "experience",
+   "The museum visit was a memorable experience.",
+   "2026 grade list"
+  ],
+  [
+   "development",
+   "The development of the new park took a year.",
+   "2026 grade list"
+  ],
+  [
+   "fraction",
+   "One half is an example of a fraction.",
+   "2026 grade list"
+  ],
+  [
+   "circulation",
+   "Exercise improves blood circulation.",
+   "2026 grade list"
+  ],
+  [
+   "organism",
+   "A mushroom is a living organism.",
+   "2026 grade list"
+  ],
+  [
+   "ecosystem",
+   "The forest is a complex ecosystem.",
+   "2026 grade list"
+  ],
+  [
+   "atmosphere",
+   "The Earth’s atmosphere contains gases.",
+   "2026 grade list"
+  ],
+  [
+   "diameter",
+   "Measure the diameter of the circle.",
+   "2026 grade list"
+  ],
+  [
+   "occurrence",
+   "Snow is a rare occurrence in tropical cities.",
+   "2026 grade list"
+  ],
+  [
+   "symmetry",
+   "The butterfly’s wings show symmetry.",
+   "2026 grade list"
+  ],
+  [
+   "hypothesis",
+   "The students tested a hypothesis in science class.",
+   "2026 grade list"
+  ],
+  [
+   "peninsula",
+   "A peninsula is surrounded by water on three sides.",
+   "2026 grade list"
+  ],
+  [
+   "necessary",
+   "A helmet is necessary for safety.",
+   "2026 grade list"
+  ],
+  [
+   "archaeology",
+   "Archaeology helps us study ancient cultures.",
+   "2026 grade list"
+  ],
+  [
+   "altitude",
+   "The airplane reached a high altitude.",
+   "2026 grade list"
+  ],
+  [
+   "hierarchy",
+   "The chart showed a hierarchy of roles.",
+   "2026 grade list"
+  ],
+  [
+   "technique",
+   "The artist demonstrated a painting technique.",
+   "2026 grade list"
+  ],
+  [
+   "restaurant",
+   "Our family ate at the restaurant.",
+   "2026 grade list"
+  ],
+  [
+   "separate",
+   "Please separate the paper from the plastic.",
+   "2026 grade list"
+  ],
+  [
+   "definitely",
+   "I will definitely finish my homework.",
+   "2026 grade list"
+  ],
+  [
+   "guarantee",
+   "A ticket does not guarantee a good seat.",
+   "2026 grade list"
+  ],
+  [
+   "privilege",
+   "It is a privilege to represent our school.",
+   "2026 grade list"
+  ],
+  [
+   "embarrassment",
+   "She smiled despite her embarrassment.",
+   "2026 grade list"
+  ],
+  [
+   "accommodation",
+   "We booked accommodation near the beach.",
+   "2026 grade list"
+  ],
+  [
+   "exaggerate",
+   "Please do not exaggerate the story.",
+   "2026 grade list"
+  ],
+  [
+   "recommendation",
+   "Her recommendation helped me choose a book.",
+   "2026 grade list"
+  ],
+  [
+   "questionnaire",
+   "The students answered a questionnaire.",
+   "2026 grade list"
+  ],
+  [
+   "maintenance",
+   "The pool is closed for maintenance.",
+   "2026 grade list"
+  ],
+  [
+   "rhythm",
+   "The drummer kept a steady rhythm.",
+   "2026 grade list"
+  ],
+  [
+   "mnemonic",
+   "A mnemonic can help you remember facts.",
+   "2026 grade list"
+  ],
+  [
+   "physique",
+   "The athlete developed a strong physique.",
+   "2026 grade list"
+  ],
+  [
+   "architecture",
+   "The building’s architecture is impressive.",
+   "2026 grade list"
+  ],
+  [
+   "literature",
+   "We read classic literature in class.",
+   "2026 grade list"
+  ],
+  [
+   "biodiversity",
+   "The rainforest has rich biodiversity.",
+   "2026 grade list"
+  ],
+  [
+   "conservation",
+   "Wildlife conservation helps protect animals.",
+   "2026 grade list"
+  ],
+  [
+   "sustainability",
+   "The class discussed environmental sustainability.",
+   "2026 grade list"
+  ],
+  [
+   "renewable",
+   "Solar power is a renewable source of energy.",
+   "2026 grade list"
+  ],
+  [
+   "habitat",
+   "The forest is a habitat for many animals.",
+   "2026 grade list"
+  ],
+  [
+   "responsibility",
+   "Caring for a pet is a responsibility.",
+   "2026 grade list"
+  ],
+  [
+   "authority",
+   "The principal has authority at the school.",
+   "2026 grade list"
+  ],
+  [
+   "imagination",
+   "Use your imagination to create a story.",
+   "2026 grade list"
+  ],
+  [
+   "motivation",
+   "Her motivation helped her keep practicing.",
+   "2026 grade list"
+  ],
+  [
+   "communication",
+   "Clear communication is important in a team.",
+   "2026 grade list"
+  ],
+  [
+   "collaboration",
+   "The project required collaboration.",
+   "2026 grade list"
+  ],
+  [
+   "volcano",
+   "The volcano erupted last year.",
+   "2026 grade list"
+  ],
+  [
+   "glacier",
+   "The glacier moved slowly down the valley.",
+   "2026 grade list"
+  ],
+  [
+   "archipelago",
+   "Indonesia is an archipelago.",
+   "2026 grade list"
+  ],
+  [
+   "hemisphere",
+   "Indonesia lies in both hemispheres.",
+   "2026 grade list"
+  ],
+  [
+   "equator",
+   "The equator crosses Indonesia.",
+   "2026 grade list"
+  ],
+  [
+   "latitude",
+   "The map shows the latitude of the city.",
+   "2026 grade list"
+  ],
+  [
+   "longitude",
+   "The map shows the longitude of the island.",
+   "2026 grade list"
+  ],
+  [
+   "orchestra",
+   "The orchestra performed a song.",
+   "2026 grade list"
+  ],
+  [
+   "melody",
+   "She played a gentle melody on the piano.",
+   "2026 grade list"
+  ],
+  [
+   "harmony",
+   "The choir sang in harmony.",
+   "2026 grade list"
+  ],
+  [
+   "algorithm",
+   "The computer follows an algorithm.",
+   "2026 grade list"
+  ],
+  [
+   "database",
+   "The library uses a database of books.",
+   "2026 grade list"
+  ],
+  [
+   "software",
+   "The computer needs software to run.",
+   "2026 grade list"
+  ]
+ ]
+};
+const $=id=>document.getElementById(id);let group='B',order=[],idx=0,correct=0,attempted=0,checked=false,correcting=false,sequence=0,finished=false;
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function current(){return banks[group][order[idx]]}
+function stop(){sequence++;if('speechSynthesis' in window)speechSynthesis.cancel()}
+function render(){finished=false;checked=false;correcting=false;$('finish').hidden=true;$('finish').textContent='';$('hear').disabled=false;$('repeat').disabled=false;$('next').disabled=false;$('question').textContent='Question '+(idx+1)+' of '+order.length;$('score').textContent=`Score: ${correct} / ${attempted}`;$('spoken').textContent='Ready to listen';$('hint').textContent='Press “Hear the judge” to hear the word, sentence, and word again.';$('answer').value='';$('answer').disabled=false;$('check').disabled=false;$('check').textContent='Check spelling';$('status').textContent='';$('status').className='status'}
+function reset(){stop();group=$('group').value;const simulation=$('mode').value==='simulation';order=shuffle([...banks[group].keys()]);if(simulation)order=order.slice(0,25);idx=0;correct=0;attempted=0;$('bankinfo').textContent=banks[group].length+' words for Group '+group+' · 10 English 1 examples + '+(banks[group].length-10)+' from the 2026 grade-based list.';$('mode-note').textContent=simulation?'Competition simulation: 25 random words, no repeats within the round. Final results appear after question 25.':'Unlimited practice: all '+banks[group].length+' source-based words in random order; reshuffles after the bank ends.';render()}
+function rankedVoices(){
+ const vs=window.speechSynthesis?.getVoices()||[];
+ return vs.filter(v=>/^en[-_]/i.test(v.lang)).sort((a,b)=>{
+  const rank=v=> (/(natural|neural|enhanced|premium|online)/i.test(v.name)?100:0)+
+    (/^en[-_]US$/i.test(v.lang)?30:0)+
+    (/(male|david|guy|mark|matthew|andrew|eric|ryan|jason|brian)/i.test(v.name)?10:0);
+  return rank(b)-rank(a);
+ });
+}
+function getVoice(){
+ const vs=rankedVoices();
+ const exact=$('specificvoice').value;
+ if(exact!=='auto')return vs.find(v=>v.voiceURI===exact)||null;
+ const pref=$('voice').value;
+ const male=/(male|david|mark|guy|jason|matthew|andrew|brian|aaron|fred|daniel|alex|eric|ryan|christopher|roger)/i;
+ const female=/(female|zira|samantha|jenny|aria|ava|allison|victoria|susan|karen|joanna|kendra)/i;
+ const american=vs.filter(v=>/^en[-_]US$/i.test(v.lang));
+ const pool=american.length?american:vs;
+ if(pref==='male')return pool.find(v=>male.test(v.name)&&!female.test(v.name))||pool[0]||null;
+ if(pref==='female')return pool.find(v=>female.test(v.name))||pool[0]||null;
+ return pool[0]||null;
+}
+function updateVoiceStatus(){
+ if(!('speechSynthesis' in window)){$('voice-status').textContent='Voice unavailable in this browser';return}
+ const sel=$('specificvoice'),saved=sel.value;
+ sel.replaceChildren(new Option('Automatically choose best available','auto'));
+ rankedVoices().forEach(v=>sel.add(new Option(v.name+' ('+v.lang+')',v.voiceURI)));
+ sel.value=[...sel.options].some(o=>o.value===saved)?saved:'auto';
+ const v=getVoice();$('voice-status').textContent=v?v.name+' ('+v.lang+')':'Default browser voice';
+}
+function speak(text, token){
+ return new Promise(resolve=>{
+  if(!('speechSynthesis' in window)||token!==sequence){resolve();return}
+  let finished=false;
+  const finish=()=>{if(!finished){finished=true;resolve()}};
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; const v=getVoice(); if(v)u.voice=v;
+  u.rate=Number($('speed').value);u.pitch=1;u.volume=1;
+  u.onend=finish;u.onerror=finish;
+  speechSynthesis.speak(u);
+ });
+}
+function pause(ms,token){return new Promise(resolve=>{
+  const start=Date.now();
+  const interval=setInterval(()=>{if(token!==sequence||Date.now()-start>=ms){clearInterval(interval);resolve()}},50);
+ })}
+async function judge(){
+ if(finished)return;stop();const token=sequence;const [word,sentence]=current();
+ if(!checked) $('answer').focus({preventScroll:true});
+ $('spoken').textContent='Preparing the judge…';$('hint').textContent='';
+ if(!('speechSynthesis' in window)){$('spoken').textContent='Speech is unavailable';$('hint').textContent='Try Chrome, Edge, or Safari with sound turned on.';return}
+ // Saying a short introduction before each isolated word avoids the first syllable being clipped by some audio systems.
+ const parts=['Your word is: '+word+'.',sentence,'The word again: '+word+'.'];
+ for(let i=0;i<parts.length;i++){
+  if(token!==sequence)return;
+  $('spoken').textContent=i===1?'Example sentence…':i===2?'Repeating the word…':'Listen to the word…';
+  await pause(300,token);if(token!==sequence)return;
+  await speak(parts[i],token);if(token!==sequence)return;
+  if(i<2){$('spoken').textContent='(pause)';await pause(Number($('pauseLength').value),token)}
+ }
+ if(token===sequence)$('spoken').textContent='Your turn to spell!';
+}
+$('hear').onclick=judge;$('repeat').onclick=judge;
+$('form').onsubmit=e=>{
+ e.preventDefault();if(finished)return;
+ if(checked&&!correcting)return;
+ stop();
+ const guess=$('answer').value.trim().toLowerCase();if(!guess)return;
+ const word=current()[0];
+ if(correcting){
+  if(guess===word){
+   correcting=false;$('status').className='status good';
+   $('status').textContent='✅ Spelled correctly on your correction! Ready for the next word.';
+   $('answer').disabled=true;$('check').disabled=true;
+  }else{
+   $('status').className='status bad';
+   $('status').textContent='❌ Try copying the correct spelling shown above.';
+   $('answer').focus();$('answer').select();
+  }
+  return;
+ }
+ checked=true;attempted++;const ok=guess===word;if(ok)correct++;
+ $('score').textContent=`Score: ${correct} / ${attempted}`;
+ $('status').className='status '+(ok?'good':'bad');
+ if(ok){
+  $('status').textContent='✅ Correct!';$('answer').disabled=true;$('check').disabled=true;
+  $('spoken').textContent='Answer submitted';
+ }else{
+  correcting=true;
+  $('spoken').textContent='Correct spelling: '+word;
+  $('hint').textContent='Look at the correct spelling above, then type it again to practice.';
+  $('status').textContent='❌ Not quite. Correct the word and submit again. Your first attempt is recorded.';
+  $('answer').value='';$('answer').disabled=false;
+  $('check').textContent='Check correction';$('answer').focus();
+ }
+};
+$('voice').onchange=()=>{stop();updateVoiceStatus()};$('specificvoice').onchange=()=>{stop();const v=getVoice();$('voice-status').textContent=v?v.name+' ('+v.lang+')':'Default browser voice'};if('speechSynthesis' in window){speechSynthesis.addEventListener?.('voiceschanged',updateVoiceStatus)}updateVoiceStatus();
+function completeSimulation(){
+ stop();finished=true;$('spoken').textContent='Competition complete!';$('hint').textContent='Start over to try a fresh set of 25 words.';
+ $('answer').disabled=true;$('check').disabled=true;$('hear').disabled=true;$('repeat').disabled=true;$('next').disabled=true;
+ $('finish').hidden=false;$('finish').innerHTML='<strong>🏆 Simulation complete!</strong><div>Final score: <strong>'+correct+' / 25</strong> ('+Math.round(correct/25*100)+'%)</div><div>Your score counts the first answer for each word. Use Start over for another shuffled competition round.</div>';
+ $('question').textContent='Finished · 25 of 25';
+}
+$('next').onclick=()=>{if(finished)return;stop();idx++;if(idx>=order.length){if($('mode').value==='simulation'){completeSimulation();return}order=shuffle([...banks[group].keys()]);idx=0}render()};$('reset').onclick=reset;$('group').onchange=reset;$('mode').onchange=reset;reset();
+</script></body></html>
