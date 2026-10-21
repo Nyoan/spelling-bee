@@ -62,6 +62,21 @@
     .feedback.bad { color: #ab3439; }
     .feedback.info { color: #415a8c; }
     .next-actions { margin-top: 13px; }
+    .auto-next-toggle { display: inline-flex; align-items: center; gap: 10px; margin-top: 13px; padding: 11px 13px; border: 1px solid #e4e9ef; background: #f9fbff; border-radius: 12px; color: #425471; font-size: 13px; cursor: pointer; line-height: 1.35; }
+    .auto-next-toggle input { width: 19px; height: 19px; accent-color: #bc8620; cursor: pointer; flex-shrink: 0; }
+    .auto-next-toggle strong { color: #294262; }
+    .auto-next-toggle small { display: block; margin-top: 2px; color: #65758a; font-size: 11px; }
+    .mistake-comparison { margin-top: 14px; }
+    .mistake-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+    .mistake-cell { border: 1px solid #ead2d2; background: #fff7f7; border-radius: 12px; padding: 13px 15px; min-width: 0; }
+    .mistake-cell.is-correct { border-color: #bcddca; background: #f4fbf5; }
+    .mistake-cell .comparison-label { font-size: 12px; font-weight: 800; color: #a14348; margin-bottom: 7px; }
+    .mistake-cell.is-correct .comparison-label { color: #237550; }
+    .spelling-display { font: 800 clamp(19px, 3.2vw, 24px)/1.7 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; letter-spacing: .025em; }
+    .typed-difference { background: #ffd7d8; box-shadow: inset 0 -3px #cb4e57; border-radius: 3px; }
+    .correct-difference { background: #c8f2d6; box-shadow: inset 0 -3px #28a263; border-radius: 3px; }
+    .difference-legend { font-size: 12px; color: #607187; line-height: 1.5; margin: 8px 0 0; }
+
     .results { margin-top: 18px; background: #f4faf6; border: 1px solid #b3dac2; border-radius: 15px; padding: 18px; }
     .results h2 { margin: 0 0 8px; font-size: 21px; }
     .results p { margin: 5px 0; line-height: 1.5; }
@@ -84,7 +99,7 @@
     .footer { max-width: 730px; margin: 20px auto 0; text-align: center; color: #7a8492; font-size: 12px; line-height: 1.65; }
     .footer a { color: #4f6590; }
     @media(max-width: 690px) { .settings { grid-template-columns: 1fr 1fr; } .field-bank { grid-column: 1/-1; } .library-grid { grid-template-columns: 1fr; } }
-    @media(max-width: 450px) { .app { width: min(100% - 20px, 930px); padding-top: 18px; } .settings { grid-template-columns: 1fr; } .field-bank { grid-column: auto; } .options-grid { grid-template-columns: 1fr; } .answer-row { flex-direction: column; } .answer-row .btn { width: 100%; } .next-actions .btn { flex: 1; } .btn { padding-left: 12px; padding-right: 12px; } }
+    @media(max-width: 450px) { .mistake-grid { grid-template-columns: 1fr; } .app { width: min(100% - 20px, 930px); padding-top: 18px; } .settings { grid-template-columns: 1fr; } .field-bank { grid-column: auto; } .options-grid { grid-template-columns: 1fr; } .answer-row { flex-direction: column; } .answer-row .btn { width: 100%; } .next-actions .btn { flex: 1; } .btn { padding-left: 12px; padding-right: 12px; } }
     @media(prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
@@ -140,7 +155,15 @@
       <div class="answer-row"><input id="answer" name="spelling" type="text" placeholder="Enter your spelling…" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" required aria-describedby="feedback"><button class="btn btn-primary" id="check" type="submit">Check spelling</button></div>
     </form>
     <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
-    <div class="actions next-actions"><button class="btn btn-secondary" id="next" type="button" disabled>Next word →</button><button class="btn btn-outline" id="skip" type="button">Skip word</button><button class="btn btn-outline" id="restart" type="button">Start over</button></div>
+    <section id="mistakePanel" class="mistake-comparison" aria-label="Your spelling compared with the correct word" hidden>
+      <div class="mistake-grid">
+        <div class="mistake-cell"><div class="comparison-label">❌ You typed</div><div id="typedSpelling" class="spelling-display"></div></div>
+        <div class="mistake-cell is-correct"><div class="comparison-label">✅ Correct spelling</div><div id="correctSpelling" class="spelling-display"></div></div>
+      </div>
+      <p class="difference-legend">Highlighted letters show what you added, missed, or changed. Your first attempt is still counted for the score.</p>
+    </section>
+    <div class="actions next-actions"><button class="btn btn-secondary" id="next" type="button" disabled>Next word + 🔊</button><button class="btn btn-outline" id="skip" type="button">Skip word</button><button class="btn btn-outline" id="restart" type="button">Start over</button></div>
+    <label class="auto-next-toggle" for="autoNext"><input type="checkbox" id="autoNext" checked><span><strong>🔊 Hear the next word automatically</strong><small>On by default. Clicking Next starts word → sentence → word; turn off for quiet practice.</small></span></label>
     <div class="results" id="results" hidden>
       <h2>🏆 Round complete!</h2>
       <p id="resultSummary"></p>
@@ -148,7 +171,7 @@
       <ul id="missedWords" class="missed-words"></ul>
       <div class="actions"><button class="btn btn-primary" id="retryMissed" type="button">Practice missed words</button><button class="btn btn-secondary" id="newRound" type="button">New round</button></div>
     </div>
-    <p class="note">Scores count only the first spelling attempt. If you make a mistake, the correct spelling appears so you can type it again. Skipping counts as incorrect. Some original words use US spellings (such as “favorite”); the expected answer always follows the chosen list, even with a UK voice.</p>
+    <p class="note">Scores count only the first spelling attempt. A mistake shows exactly what you typed, highlights the spelling differences, and lets you correct it. Next Word can read the next word automatically. Skipping counts as incorrect. Some original words use US spellings (such as “favorite”); the expected answer always follows the chosen list, even with a UK voice.</p>
   </section>
 
   <section class="panel" id="study-view" role="tabpanel" aria-labelledby="tab-study" aria-label="Study the spelling words" style="margin-top:16px" hidden>
@@ -560,7 +583,10 @@ function renderQuestion() {
   $('repeat').disabled = false;
   $('skip').disabled = false;
   $('next').disabled = true;
-  $('next').textContent = 'Next word →';
+  updateNextLabel();
+  $('mistakePanel').hidden = true;
+  $('typedSpelling').replaceChildren();
+  $('correctSpelling').replaceChildren();
   $('feedback').className = 'feedback';
   $('feedback').textContent = '';
   updateScoreAndProgress();
@@ -580,6 +606,63 @@ function newRound(retryPool = null) {
   renderQuestion();
   if (!$('study-view').hidden) renderLibrary();
 }
+function updateNextLabel() {
+  const finalQuestion = state.order.length && state.index === state.order.length - 1;
+  $('next').textContent = finalQuestion && $('mode').value === 'simulation' && !state.isRetry
+    ? 'See results →'
+    : ($('autoNext').checked ? 'Next word + 🔊' : 'Next word →');
+}
+
+// Show which letters were wrong, omitted, or inserted, not just the correct answer.
+// Levenshtein alignment keeps the comparison meaningful for missing letters.
+function differenceFlags(typed, correct) {
+  const a = Array.from(normal(typed)), b = Array.from(normal(correct));
+  const cost = Array.from({length: a.length + 1}, () => Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i++) cost[i][0] = i;
+  for (let j = 0; j <= b.length; j++) cost[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      cost[i][j] = Math.min(
+        cost[i - 1][j] + 1,
+        cost[i][j - 1] + 1,
+        cost[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  const typedMarks = Array(a.length).fill(false), correctMarks = Array(b.length).fill(false);
+  let i = a.length, j = b.length;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && a[i - 1] === b[j - 1] && cost[i][j] === cost[i - 1][j - 1]) {
+      i--; j--;
+    } else if (i > 0 && j > 0 && cost[i][j] === cost[i - 1][j - 1] + 1) {
+      typedMarks[--i] = true;
+      correctMarks[--j] = true;
+    } else if (j > 0 && cost[i][j] === cost[i][j - 1] + 1) {
+      correctMarks[--j] = true;
+    } else {
+      typedMarks[--i] = true;
+    }
+  }
+  return {typedMarks, correctMarks};
+}
+function renderLetterMarks(id, value, flags, cssClass) {
+  const element = $(id);
+  element.replaceChildren();
+  element.setAttribute('aria-label', value);
+  for (const [index, character] of Array.from(value).entries()) {
+    const span = document.createElement('span');
+    span.textContent = character;
+    if (flags[index]) span.className = cssClass;
+    element.appendChild(span);
+  }
+}
+function showMistakeComparison(typed, correct) {
+  const {typedMarks, correctMarks} = differenceFlags(typed, correct);
+  renderLetterMarks('typedSpelling', typed, typedMarks, 'typed-difference');
+  renderLetterMarks('correctSpelling', correct, correctMarks, 'correct-difference');
+  $('mistakePanel').hidden = false;
+}
+
 function setFeedback(message, status) {
   $('feedback').className = 'feedback ' + status;
   $('feedback').textContent = message;
@@ -590,8 +673,7 @@ function recordFirstTry(correct, guess, skipped) {
   if (correct) state.correct++;
   else state.misses.push({ item: current(), guess, skipped: !!skipped });
   $('next').disabled = false;
-  const last = state.index === state.order.length - 1;
-  $('next').textContent = last && $('mode').value === 'simulation' && !state.isRetry ? 'See results →' : 'Next word →';
+  updateNextLabel();
   $('skip').disabled = true;
   updateScoreAndProgress();
 }
@@ -602,7 +684,8 @@ function showAnswer() {
 $('answerForm').addEventListener('submit', event => {
   event.preventDefault();
   if (state.finished || (state.checked && !state.correcting)) return;
-  const guess = normal($('answer').value);
+  const typed = $('answer').value.trim();
+  const guess = normal(typed);
   if (!guess) return;
   stopAll();
   const word = normal(current().word);
@@ -614,13 +697,13 @@ $('answerForm').addEventListener('submit', event => {
       $('check').disabled = true;
       $('hint').textContent = 'Great correction. Continue with the next word.';
     } else {
-      setFeedback('❌ Try copying the correct spelling shown above.', 'bad');
+      setFeedback(`❌ Your latest correction was “${typed}”. Try again using the correct spelling shown above.`, 'bad');
       $('answer').focus(); $('answer').select();
     }
     return;
   }
   const correct = guess === word;
-  recordFirstTry(correct, guess, false);
+  recordFirstTry(correct, typed, false);
   if (correct) {
     $('spoken').textContent = 'Answer submitted';
     $('hint').textContent = `Correct word: ${current().word}`;
@@ -630,7 +713,8 @@ $('answerForm').addEventListener('submit', event => {
   } else {
     state.correcting = true;
     showAnswer();
-    setFeedback('❌ Not quite. Your first try is recorded. Type the correct spelling once to practise.', 'bad');
+    showMistakeComparison(typed, current().word);
+    setFeedback('❌ Not quite. Compare your answer with the correct spelling below, then type the correct word once to practise.', 'bad');
     $('answer').value = '';
     $('check').textContent = 'Check correction';
     $('answer').focus();
@@ -676,16 +760,19 @@ $('next').addEventListener('click', () => {
   stopAll();
   if (state.index + 1 < state.order.length) {
     state.index++;
-    renderQuestion();
   } else if ($('mode').value === 'simulation' && !state.isRetry) {
     showResults();
+    return; // Results must never trigger the next spelling audio.
   } else {
     state.order = randomized(state.pool);
     state.index = 0;
-    state.isRetry = !!state.isRetry;
-    renderQuestion();
   }
+  renderQuestion();
+  // Keep this in the Next button's click handler for mobile autoplay permissions.
+  if ($('autoNext').checked) playSequence(current(), 'test', $('hear'));
+  else $('answer').focus({preventScroll: true});
 });
+$('autoNext').addEventListener('change', updateNextLabel);
 $('retryMissed').addEventListener('click', () => {
   if (!state.misses.length) return;
   const misses = state.misses.map(m => m.item);
