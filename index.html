@@ -1,1462 +1,796 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Spelling Bee Practice</title>
-<style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#243047;background:#f8f6ed}*{box-sizing:border-box}body{margin:0;padding:28px 16px}.app{max-width:640px;margin:0 auto}.header{text-align:center;margin-bottom:22px}.bee{font-size:48px}.header h1{margin:4px 0 6px;font-size:30px}.muted{color:#667085}.card{background:white;border:1px solid #e6e3d9;border-radius:20px;padding:24px;box-shadow:0 10px 30px #2430470b}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.control{flex:1;min-width:140px}label{display:block;font-weight:650;font-size:13px;margin-bottom:7px}select,input{width:100%;background:white;border:1px solid #ccd2dd;border-radius:11px;padding:13px;font:inherit;color:#243047}button{cursor:pointer;border:0;border-radius:11px;padding:13px 18px;font:inherit;font-weight:700}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:#f2b730;color:#272414}.secondary{background:#edf1f7;color:#243047}.judge{background:#fff8db;border-radius:16px;text-align:center;margin:22px 0;padding:22px 14px;min-height:175px;display:flex;flex-direction:column;justify-content:center;gap:10px}.judge h2{font-size:17px;margin:0}.spoken{font-size:20px;font-weight:750}.hint{min-height:42px;line-height:1.45}.controls2{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.answerrow{display:flex;gap:10px}.answerrow input{min-width:0;flex:1}.status{min-height:28px;font-weight:700;margin-top:14px}.good{color:#167249}.bad{color:#b23a3a}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:15px;font-size:14px;color:#667085}.finish{background:#f0faf4;border:1px solid #a8d8bd;border-radius:12px;padding:16px;margin-top:14px;line-height:1.6}.small{font-size:12px;color:#667085;line-height:1.5;margin-top:16px}@media(max-width:430px){.card{padding:16px}.answerrow{flex-direction:column}.controls2 button{flex:1}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Spelling Bee Practice · Updated Edition</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #203148; background: #f9f7ef; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 15% -14%, #fff0bb 0, transparent 37%), #f9f7ef; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; transition: background-color .15s, transform .15s, border-color .15s; }
+    button:disabled { cursor: not-allowed; opacity: .45; transform: none; }
+    button:not(:disabled):active { transform: translateY(1px); }
+    :focus-visible { outline: 3px solid #326ae0; outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .app { width: min(100% - 30px, 930px); margin: 0 auto; padding: 30px 0 45px; }
+    .masthead { text-align: center; margin-bottom: 23px; }
+    .mark { display: inline-grid; place-items: center; height: 58px; width: 58px; border-radius: 18px; font-size: 32px; background: #ffe5a1; box-shadow: 0 6px 15px #8766221c; }
+    h1 { font-size: clamp(26px, 5vw, 37px); letter-spacing: -.8px; line-height: 1.15; margin: 12px 0 8px; }
+    .intro { color: #5a697c; line-height: 1.55; margin: 0 auto; max-width: 630px; }
+    .top-stats { display: flex; gap: 9px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+    .top-stats span { padding: 6px 12px; border-radius: 999px; border: 1px solid #eadfbf; background: #fffdf5; color: #6a5735; font-size: 12px; font-weight: 650; }
+    .tabs { display: flex; gap: 8px; background: #f0efe6; border-radius: 15px; padding: 6px; margin: 0 auto 16px; max-width: 460px; }
+    .tab { flex: 1; border-radius: 11px; border: 0; background: transparent; padding: 12px 13px; color: #617084; font-weight: 760; }
+    .tab.active { color: #23344d; background: white; box-shadow: 0 2px 8px #343e5019; }
+    .panel { background: white; border: 1px solid #e4e4dc; border-radius: 22px; box-shadow: 0 12px 40px #35415f0b; padding: clamp(16px, 4vw, 28px); }
+    .settings { display: grid; gap: 13px; grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .field { min-width: 0; }
+    .field label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 780; color: #394a64; }
+    select, input[type="text"], input[type="search"] { width: 100%; min-width: 0; background: white; border: 1px solid #cbd3dd; border-radius: 11px; color: #203148; padding: 11px 12px; font-size: 14px; }
+    select:focus, input:focus { border-color: #d09a21; }
+    .subtle { color: #657187; font-size: 13px; line-height: 1.55; }
+    .setting-note { margin: 11px 0 0; }
+    .audio-options { margin-top: 16px; padding: 14px 16px; border: 1px solid #e4e9ef; border-radius: 14px; background: #fafcfe; }
+    .audio-options summary { font-size: 13px; cursor: pointer; font-weight: 780; color: #415572; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+    .audio-help { font-size: 12px; color: #69778d; line-height: 1.55; margin: 11px 0 0; }
+    .rule { height: 1px; background: #eaece9; margin: 21px 0; }
+    .round-meta { display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap; color: #5d6d82; font-weight: 760; font-size: 13px; margin: 3px 0 9px; }
+    .meter { height: 8px; border-radius: 999px; background: #edf1f2; overflow: hidden; }
+    .meter > div { height: 100%; width: 0; background: linear-gradient(90deg,#e5a62d,#f7cc61); transition: width .2s; }
+    .judge { background: #fffae9; border: 1px solid #f1e4b9; border-radius: 19px; min-height: 201px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 11px; padding: 23px 18px; margin-top: 17px; }
+    .judge-label { font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: .1em; color: #a17d35; }
+    .judge-message { font-size: clamp(21px, 4vw, 27px); font-weight: 790; letter-spacing: -.35px; overflow-wrap: anywhere; }
+    .judge-hint { font-size: 14px; color: #5f6471; line-height: 1.55; max-width: 560px; }
+    .speak-status { color: #7e6c40; font-size: 12px; min-height: 17px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; align-items: center; }
+    .btn { border: 1px solid transparent; border-radius: 11px; padding: 12px 17px; font-size: 14px; font-weight: 760; min-height: 44px; }
+    .btn-primary { background: #f1b633; color: #2a291c; }
+    .btn-primary:hover:not(:disabled) { background: #e2a529; }
+    .btn-secondary { background: #eff2f7; color: #314258; }
+    .btn-secondary:hover:not(:disabled) { background: #e3e9f2; }
+    .btn-outline { border-color: #cfd7e2; color: #43536a; background: white; }
+    .btn-outline:hover:not(:disabled) { background: #f8fbff; }
+    .answer-label { display: block; margin: 23px 0 8px; font-size: 14px; font-weight: 790; }
+    .answer-row { display: flex; gap: 10px; }
+    .answer-row input { flex: 1; font-size: 17px; padding: 13px; }
+    .feedback { font-size: 14px; min-height: 22px; margin-top: 13px; font-weight: 720; line-height: 1.55; }
+    .feedback.good { color: #147348; }
+    .feedback.bad { color: #ab3439; }
+    .feedback.info { color: #415a8c; }
+    .next-actions { margin-top: 13px; }
+    .results { margin-top: 18px; background: #f4faf6; border: 1px solid #b3dac2; border-radius: 15px; padding: 18px; }
+    .results h2 { margin: 0 0 8px; font-size: 21px; }
+    .results p { margin: 5px 0; line-height: 1.5; }
+    .missed-words { margin: 12px 0; padding-left: 21px; line-height: 1.7; }
+    .note { margin: 15px 0 0; color: #7a8290; font-size: 12px; line-height: 1.65; }
+    .library-header { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+    .library-header h2 { font-size: 20px; margin: 0; }
+    .library-search { margin: 14px 0; }
+    .library-search input { padding: 13px; }
+    .library-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+    .word-card { background: #fbfcff; border: 1px solid #e0e6ee; border-radius: 13px; padding: 15px; min-width: 0; }
+    .word-top { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+    .word-top strong { font-size: 18px; overflow-wrap: anywhere; }
+    .word-top button { background: #eaf1ff; border: 1px solid #d6e2fa; border-radius: 10px; color: #254b83; padding: 8px 11px; font-weight: 760; font-size: 12px; white-space: nowrap; }
+    .word-top button:hover { background: #dce9ff; }
+    .word-sentence { margin-top: 9px; font-size: 13px; color: #52637a; line-height: 1.55; }
+    .word-origin { margin-top: 10px; font-size: 11px; color: #8791a0; }
+    .library-status { margin-top: 12px; color: #65758a; font-size: 13px; }
+    .show-more { margin-top: 15px; }
+    .footer { max-width: 730px; margin: 20px auto 0; text-align: center; color: #7a8492; font-size: 12px; line-height: 1.65; }
+    .footer a { color: #4f6590; }
+    @media(max-width: 690px) { .settings { grid-template-columns: 1fr 1fr; } .field-bank { grid-column: 1/-1; } .library-grid { grid-template-columns: 1fr; } }
+    @media(max-width: 450px) { .app { width: min(100% - 20px, 930px); padding-top: 18px; } .settings { grid-template-columns: 1fr; } .field-bank { grid-column: auto; } .options-grid { grid-template-columns: 1fr; } .answer-row { flex-direction: column; } .answer-row .btn { width: 100%; } .next-actions .btn { flex: 1; } .btn { padding-left: 12px; padding-right: 12px; } }
+    @media(prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  </style>
 </head>
-<body><main class="app">
-<header class="header"><div class="bee" aria-hidden="true">🐝</div><h1>Spelling Bee Practice</h1><div class="muted">Listen carefully, then type what you hear. The word stays hidden until you submit an answer.</div></header>
-<section class="card">
-<div class="controls"><div class="control"><label for="group">Competition group</label><select id="group"><option value="B">Group B · Grades 3–4</option><option value="C">Group C · Grades 5–6</option></select></div><div class="control"><label for="speed">Speaking speed</label><select id="speed"><option value="0.7">Slow</option><option value="0.85" selected>Normal practice</option><option value="1">Regular</option></select></div></div>
-<div class="controls" style="margin-top:12px"><div class="control"><label for="mode">Practice mode</label><select id="mode"><option value="practice">Unlimited practice</option><option value="simulation">Competition simulation · 25 words</option></select></div><div class="control"><label for="pauseLength">Pause between readings</label><select id="pauseLength"><option value="2000" selected>2 seconds</option><option value="3000">3 seconds</option><option value="4000">4 seconds</option></select></div></div>
-<div class="controls" style="margin-top:12px"><div class="control"><label for="voice">Judge voice</label><select id="voice"><option value="male" selected>American male (preferred)</option><option value="female">American female</option><option value="any">American English (any)</option></select></div><div class="control"><label>Voice available</label><div class="muted" id="voice-status" style="font-size:13px;padding:11px 0">Checking device voices…</div></div></div>
-<div class="controls" style="margin-top:12px"><div class="control" style="min-width:100%"><label for="specificvoice">Actual voice on your device</label><select id="specificvoice"><option value="auto">Automatically choose best available</option></select></div></div>
-<div class="meta"><span id="question">Question 1</span><span id="score">Score: 0 / 0</span></div><div id="mode-note" class="small" style="margin-top:5px">Unlimited practice: the full source-based word bank, shuffled.</div>
-<div class="judge" aria-live="polite"><h2>Judge</h2><div class="spoken" id="spoken">Press “Hear the judge”</div><div class="hint" id="hint">The judge will say the word, pause for 2 seconds, say a sentence, pause for 2 seconds, then repeat the word.</div></div>
-<div class="small" id="bankinfo" style="margin-top:14px"></div><div class="controls2"><button class="primary" id="hear" type="button">🔊 Hear the judge</button><button class="secondary" id="repeat" type="button">↻ Repeat</button></div>
-<form id="form"><label for="answer">Type the word you hear</label><div class="answerrow"><input id="answer" type="text" placeholder="Type the word here…" autocomplete="off" autocapitalize="off" spellcheck="false" required><button class="primary" type="submit" id="check">Check spelling</button></div></form>
-<div class="status" id="status" role="status"></div><div id="finish" class="finish" hidden></div>
-<div class="controls2"><button class="secondary" type="button" id="next">Next word →</button><button class="secondary" type="button" id="reset">Start over</button></div>
-<div class="small">Sources: <a href="https://english1.co.id/blog/persiapan-akademik/contoh-soal-spelling-bee/" target="_blank" rel="noopener">English 1 sample words (September 2026)</a> and <a href="https://www.spellingbee.org.ro/2026_Spelling_Bee_Word_Lists_Final.pdf" target="_blank" rel="noopener">2026 grade-based competition vocabulary (separate Romanian competition)</a>. Sentences were written for this app and are not official judge scripts. The banks are not official English 1 competition word lists. Words are kept hidden until an incorrect first answer; the first answer counts toward the score. Choose a natural voice if your device offers one. Practice cycles through all words; simulation uses 25 randomly selected words.</div>
-</section></main>
+<body>
+<main class="app">
+  <header class="masthead">
+    <div class="mark" aria-hidden="true">🐝</div>
+    <h1>Spelling Bee Practice</h1>
+    <p class="intro">Only three spoken parts: word → sentence → word. No extra spoken introduction. Practise the original and new word lists with UK or US pronunciation.</p>
+    <div class="top-stats"><span>343 unique words</span><span>7 original &amp; new lists</span><span>UK &amp; US voices</span></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Practice or study">
+    <button class="tab active" role="tab" id="tab-test" type="button" aria-selected="true" aria-controls="test-view">✍️ Spelling test</button>
+    <button class="tab" role="tab" id="tab-study" type="button" aria-selected="false" aria-controls="study-view">📚 Study word lists</button>
+  </nav>
+
+  <section class="panel" aria-label="Spelling Bee settings">
+    <div class="settings">
+      <div class="field field-bank"><label for="bank">Choose a word list</label><select id="bank"></select></div>
+      <div class="field"><label for="mode">Practice mode</label><select id="mode"><option value="practice">Unlimited practice</option><option value="simulation">Competition · up to 25 words</option></select></div>
+      <div class="field"><label for="accent">Pronunciation accent</label><select id="accent"><option value="en-GB">🇬🇧 British English (UK)</option><option value="en-US">🇺🇸 American English (US)</option></select></div>
+      <div class="field"><label for="speed">Device voice speed</label><select id="speed"><option value="0.7">Slow · 70%</option><option value="0.85">Practice · 85%</option><option value="1" selected>Natural · 100%</option><option value="1.1">Fast · 110%</option></select></div>
+      <div class="field"><label for="pause">Pause between readings</label><select id="pause"><option value="500" selected>Word Library · 0.5 second</option><option value="1000">1 second</option><option value="2000">2 seconds</option><option value="3000">3 seconds</option><option value="4000">4 seconds</option></select></div>
+      <div class="field"><label for="audioPref">Audio priority</label><select id="audioPref"><option value="auto">Automatic (recorded UK first)</option><option value="online">Online UK speech first</option><option value="device">Device voice only · offline</option></select></div>
+    </div>
+    <p class="subtle setting-note" id="listNote"></p>
+    <details class="audio-options">
+      <summary>🎙️ Device voice &amp; audio checks</summary>
+      <div class="options-grid">
+        <div class="field"><label for="voiceStyle">Preferred device voice</label><select id="voiceStyle"><option value="male">Male when available</option><option value="female">Female when available</option><option value="any">Best available</option></select></div>
+        <div class="field"><label for="specificVoice">Actual voice on this device</label><select id="specificVoice"><option value="auto">Choose automatically</option></select></div>
+      </div>
+      <p class="audio-help" id="voiceInfo">Checking available voices…</p>
+      <div class="actions"><button class="btn btn-outline" id="testDevice" type="button">🔊 Test device voice</button><button class="btn btn-outline" id="testOxford" type="button">Test Oxford UK</button><button class="btn btn-outline" id="testGoogle" type="button">Test Google UK</button><button class="btn btn-outline" id="testStream" type="button">Test StreamElements UK</button><button class="btn btn-secondary" id="resetAudio" type="button">Retry audio providers</button></div>
+      <p class="audio-help" id="diagnostic" role="status"></p>
+      <p class="audio-help">UK recordings and online speech need internet access and may be blocked by your browser or provider. The app falls back to its installed device voice. When US is selected, only the device voice is used to keep the accent consistent. Recorded Oxford and online clips play at their original speed for clearer pronunciation. Device voice speed affects only the built-in text-to-speech voice. If a word sounds unusual, read the audio source displayed under the judge after playback.</p>
+    </details>
+  </section>
+
+  <section class="panel" id="test-view" role="tabpanel" aria-labelledby="tab-test" aria-label="Spelling test" style="margin-top:16px">
+    <div class="round-meta"><span id="question">Question 1</span><span id="score">Score: 0 / 0</span></div>
+    <div class="meter" role="progressbar" aria-label="Round progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><div id="progressFill"></div></div>
+    <div class="judge" aria-live="polite">
+      <div class="judge-label">Spelling judge</div>
+      <div class="judge-message" id="spoken">Ready to listen?</div>
+      <div class="judge-hint" id="hint">Press “Hear the judge” to hear word → sentence → word. The spelling stays hidden.</div>
+      <div class="speak-status" id="audioStatus" role="status"></div>
+    </div>
+    <div class="actions"><button class="btn btn-primary" id="hear" type="button">🔊 Hear the judge</button><button class="btn btn-secondary" id="repeat" type="button">↻ Repeat</button><button class="btn btn-outline" id="stop" type="button">⏹ Stop audio</button></div>
+    <form id="answerForm" autocomplete="off">
+      <label class="answer-label" for="answer">Type the word you hear</label>
+      <div class="answer-row"><input id="answer" name="spelling" type="text" placeholder="Enter your spelling…" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" required aria-describedby="feedback"><button class="btn btn-primary" id="check" type="submit">Check spelling</button></div>
+    </form>
+    <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+    <div class="actions next-actions"><button class="btn btn-secondary" id="next" type="button" disabled>Next word →</button><button class="btn btn-outline" id="skip" type="button">Skip word</button><button class="btn btn-outline" id="restart" type="button">Start over</button></div>
+    <div class="results" id="results" hidden>
+      <h2>🏆 Round complete!</h2>
+      <p id="resultSummary"></p>
+      <p id="resultExplanation" class="subtle"></p>
+      <ul id="missedWords" class="missed-words"></ul>
+      <div class="actions"><button class="btn btn-primary" id="retryMissed" type="button">Practice missed words</button><button class="btn btn-secondary" id="newRound" type="button">New round</button></div>
+    </div>
+    <p class="note">Scores count only the first spelling attempt. If you make a mistake, the correct spelling appears so you can type it again. Skipping counts as incorrect. Some original words use US spellings (such as “favorite”); the expected answer always follows the chosen list, even with a UK voice.</p>
+  </section>
+
+  <section class="panel" id="study-view" role="tabpanel" aria-labelledby="tab-study" aria-label="Study the spelling words" style="margin-top:16px" hidden>
+    <div class="library-header"><h2>📚 Word library</h2><span class="subtle" id="libraryCount"></span></div>
+    <p class="subtle" style="margin:10px 0 0">Tap Listen to hear only word → sentence → word, just like the spelling judge. Words and sentences are visible here for studying; switch to “Spelling test” for hidden-answer practice.</p>
+    <div class="library-search"><label class="field" for="search" style="display:block;font-size:12px;font-weight:760;margin-bottom:7px">Find a word or sentence</label><input type="search" id="search" placeholder="Search this word list…" autocomplete="off"></div>
+    <div class="library-grid" id="libraryGrid"></div>
+    <p class="library-status" id="libraryStatus" role="status"></p>
+    <button class="btn btn-secondary show-more" id="showMore" type="button" hidden>Show more words</button>
+  </section>
+
+  <footer class="footer">Your original Group B and C lists and all 238 uploaded additional words are included. Pronunciation recordings may use <a href="https://www.oxfordlearnersdictionaries.com/" target="_blank" rel="noopener noreferrer">Oxford Learner’s Dictionaries</a> and the <a href="https://dictionaryapi.dev/" target="_blank" rel="noopener noreferrer">Free Dictionary API</a>; online text-to-speech endpoints are best-effort and not guaranteed. No account is needed. This is a self-contained practice app, not an official competition word bank.</footer>
+</main>
 <script>
-const banks={
- "B": [
-  [
-   "green",
-   "The leaves turn green after the rain.",
-   "English 1 examples"
-  ],
-  [
-   "happy",
-   "The children were happy to see their friends.",
-   "English 1 examples"
-  ],
-  [
-   "clean",
-   "Please keep the classroom clean.",
-   "English 1 examples"
-  ],
-  [
-   "school",
-   "We walk to school every morning.",
-   "English 1 examples"
-  ],
-  [
-   "teacher",
-   "Our teacher reads us a story.",
-   "English 1 examples"
-  ],
-  [
-   "beautiful",
-   "The flowers look beautiful today.",
-   "English 1 examples"
-  ],
-  [
-   "little",
-   "A little kitten slept in the basket.",
-   "English 1 examples"
-  ],
-  [
-   "kitchen",
-   "My father cooks dinner in the kitchen.",
-   "English 1 examples"
-  ],
-  [
-   "knock",
-   "Please knock before opening the door.",
-   "English 1 examples"
-  ],
-  [
-   "bright",
-   "The bright sun warmed the garden.",
-   "English 1 examples"
-  ],
-  [
-   "rainbow",
-   "After the rain, we can see a rainbow.",
-   "2026 grade list"
-  ],
-  [
-   "library",
-   "We borrow books from the library.",
-   "2026 grade list"
-  ],
-  [
-   "elephant",
-   "The elephant used its trunk to drink.",
-   "2026 grade list"
-  ],
-  [
-   "mountain",
-   "Clouds covered the top of the mountain.",
-   "2026 grade list"
-  ],
-  [
-   "mysterious",
-   "We heard a mysterious sound at night.",
-   "2026 grade list"
-  ],
-  [
-   "whisper",
-   "Please whisper inside the library.",
-   "2026 grade list"
-  ],
-  [
-   "thunder",
-   "Loud thunder woke the sleeping dog.",
-   "2026 grade list"
-  ],
-  [
-   "meadow",
-   "Flowers grew across the meadow.",
-   "2026 grade list"
-  ],
-  [
-   "pillow",
-   "She rested her head on the pillow.",
-   "2026 grade list"
-  ],
-  [
-   "creature",
-   "A tiny creature crawled under the leaf.",
-   "2026 grade list"
-  ],
-  [
-   "freezer",
-   "We keep ice cream in the freezer.",
-   "2026 grade list"
-  ],
-  [
-   "measure",
-   "Use a ruler to measure the table.",
-   "2026 grade list"
-  ],
-  [
-   "playground",
-   "Children ran across the playground.",
-   "2026 grade list"
-  ],
-  [
-   "toothbrush",
-   "I packed my toothbrush for the trip.",
-   "2026 grade list"
-  ],
-  [
-   "sunflower",
-   "The sunflower turned toward the sunlight.",
-   "2026 grade list"
-  ],
-  [
-   "notebook",
-   "He drew a picture in his notebook.",
-   "2026 grade list"
-  ],
-  [
-   "weekend",
-   "We visited our cousins over the weekend.",
-   "2026 grade list"
-  ],
-  [
-   "waterfall",
-   "The waterfall flowed over the rocks.",
-   "2026 grade list"
-  ],
-  [
-   "backpack",
-   "Her backpack held three books.",
-   "2026 grade list"
-  ],
-  [
-   "artist",
-   "The artist painted a picture.",
-   "2026 grade list"
-  ],
-  [
-   "farmer",
-   "The farmer planted rice in the field.",
-   "2026 grade list"
-  ],
-  [
-   "painter",
-   "The painter used a small brush.",
-   "2026 grade list"
-  ],
-  [
-   "forest",
-   "A deer walked through the forest.",
-   "2026 grade list"
-  ],
-  [
-   "village",
-   "My grandparents live in a quiet village.",
-   "2026 grade list"
-  ],
-  [
-   "island",
-   "We traveled by boat to the island.",
-   "2026 grade list"
-  ],
-  [
-   "desert",
-   "The desert was hot and dry.",
-   "2026 grade list"
-  ],
-  [
-   "ocean",
-   "The boat sailed across the ocean.",
-   "2026 grade list"
-  ],
-  [
-   "valley",
-   "A river runs through the valley.",
-   "2026 grade list"
-  ],
-  [
-   "museum",
-   "We saw old paintings in the museum.",
-   "2026 grade list"
-  ],
-  [
-   "hospital",
-   "The doctor works at the hospital.",
-   "2026 grade list"
-  ],
-  [
-   "restaurant",
-   "Our family ate at the restaurant.",
-   "2026 grade list"
-  ],
-  [
-   "giraffe",
-   "The giraffe reached the tall leaves.",
-   "2026 grade list"
-  ],
-  [
-   "penguin",
-   "The penguin waddled across the ice.",
-   "2026 grade list"
-  ],
-  [
-   "rabbit",
-   "The rabbit hid behind a tree.",
-   "2026 grade list"
-  ],
-  [
-   "turtle",
-   "The turtle moved slowly on the sand.",
-   "2026 grade list"
-  ],
-  [
-   "friendly",
-   "Our new neighbor is very friendly.",
-   "2026 grade list"
-  ],
-  [
-   "careful",
-   "Be careful when crossing the road.",
-   "2026 grade list"
-  ],
-  [
-   "helpful",
-   "Her helpful advice made the task easier.",
-   "2026 grade list"
-  ],
-  [
-   "playful",
-   "The playful puppy chased a ball.",
-   "2026 grade list"
-  ],
-  [
-   "thankful",
-   "I am thankful for your help.",
-   "2026 grade list"
-  ],
-  [
-   "graceful",
-   "The dancer made a graceful turn.",
-   "2026 grade list"
-  ],
-  [
-   "wonderful",
-   "We had a wonderful day at the beach.",
-   "2026 grade list"
-  ],
-  [
-   "curious",
-   "The curious child asked many questions.",
-   "2026 grade list"
-  ],
-  [
-   "exciting",
-   "The exciting game ended with a goal.",
-   "2026 grade list"
-  ],
-  [
-   "powerful",
-   "The powerful wind shook the trees.",
-   "2026 grade list"
-  ],
-  [
-   "favorite",
-   "Mango is my favorite fruit.",
-   "2026 grade list"
-  ],
-  [
-   "excellent",
-   "She did an excellent job on the project.",
-   "2026 grade list"
-  ],
-  [
-   "question",
-   "The student asked a question.",
-   "2026 grade list"
-  ],
-  [
-   "sentence",
-   "Please write a sentence in your notebook.",
-   "2026 grade list"
-  ],
-  [
-   "answer",
-   "He wrote his answer on the paper.",
-   "2026 grade list"
-  ],
-  [
-   "problem",
-   "We solved the problem together.",
-   "2026 grade list"
-  ],
-  [
-   "special",
-   "Today is a special day for our family.",
-   "2026 grade list"
-  ],
-  [
-   "tomorrow",
-   "We will go swimming tomorrow.",
-   "2026 grade list"
-  ],
-  [
-   "yesterday",
-   "It rained all day yesterday.",
-   "2026 grade list"
-  ],
-  [
-   "travel",
-   "We travel by train to the city.",
-   "2026 grade list"
-  ],
-  [
-   "bicycle",
-   "He rides his bicycle to the park.",
-   "2026 grade list"
-  ],
-  [
-   "triangle",
-   "A triangle has three sides.",
-   "2026 grade list"
-  ],
-  [
-   "together",
-   "We worked together to finish the poster.",
-   "2026 grade list"
-  ],
-  [
-   "interesting",
-   "The science lesson was interesting.",
-   "2026 grade list"
-  ],
-  [
-   "difficult",
-   "The final puzzle was difficult.",
-   "2026 grade list"
-  ],
-  [
-   "activity",
-   "Drawing is my favorite afternoon activity.",
-   "2026 grade list"
-  ],
-  [
-   "service",
-   "The shop offers a delivery service.",
-   "2026 grade list"
-  ],
-  [
-   "gentle",
-   "A gentle breeze moved the leaves.",
-   "2026 grade list"
-  ],
-  [
-   "thought",
-   "She thought carefully before answering.",
-   "2026 grade list"
-  ],
-  [
-   "brought",
-   "Dad brought snacks for the picnic.",
-   "2026 grade list"
-  ],
-  [
-   "through",
-   "We walked through the garden.",
-   "2026 grade list"
-  ],
-  [
-   "enough",
-   "We have enough water for everyone.",
-   "2026 grade list"
-  ],
-  [
-   "tough",
-   "The rope was strong and tough.",
-   "2026 grade list"
-  ],
-  [
-   "laugh",
-   "The funny joke made us laugh.",
-   "2026 grade list"
-  ],
-  [
-   "daughter",
-   "Their daughter is learning to swim.",
-   "2026 grade list"
-  ],
-  [
-   "circle",
-   "Draw a circle on the board.",
-   "2026 grade list"
-  ],
-  [
-   "square",
-   "Each side of the square is equal.",
-   "2026 grade list"
-  ],
-  [
-   "February",
-   "February comes after January.",
-   "2026 grade list"
-  ],
-  [
-   "Wednesday",
-   "Our music lesson is on Wednesday.",
-   "2026 grade list"
-  ],
-  [
-   "Thursday",
-   "We have football practice on Thursday.",
-   "2026 grade list"
-  ],
-  [
-   "Saturday",
-   "We visit the market every Saturday.",
-   "2026 grade list"
-  ],
-  [
-   "write",
-   "Please write your name clearly.",
-   "2026 grade list"
-  ],
-  [
-   "honest",
-   "An honest person tells the truth.",
-   "2026 grade list"
-  ],
-  [
-   "listen",
-   "Listen carefully to the instructions.",
-   "2026 grade list"
-  ],
-  [
-   "celebrate",
-   "We celebrate our school anniversary.",
-   "2026 grade list"
-  ],
-  [
-   "discovery",
-   "The discovery amazed the young explorer.",
-   "2026 grade list"
-  ],
-  [
-   "explorer",
-   "The explorer studied the map.",
-   "2026 grade list"
-  ],
-  [
-   "comfortable",
-   "The new chair is comfortable.",
-   "2026 grade list"
-  ],
-  [
-   "holiday",
-   "We visited our family during the holiday.",
-   "2026 grade list"
-  ],
-  [
-   "vacation",
-   "Our summer vacation was exciting.",
-   "2026 grade list"
-  ],
-  [
-   "whistle",
-   "The referee blew a whistle.",
-   "2026 grade list"
-  ],
-  [
-   "butterfly",
-   "A butterfly landed on a flower.",
-   "2026 grade list"
-  ],
-  [
-   "journey",
-   "The journey took three hours.",
-   "2026 grade list"
-  ],
-  [
-   "scientific",
-   "The students made a scientific observation.",
-   "2026 grade list"
-  ],
-  [
-   "believe",
-   "I believe we can finish on time.",
-   "2026 grade list"
-  ],
-  [
-   "receipt",
-   "Keep the receipt after buying the book.",
-   "2026 grade list"
-  ],
-  [
-   "neighbor",
-   "Our neighbor has a friendly cat.",
-   "2026 grade list"
-  ],
-  [
-   "business",
-   "My aunt runs a small business.",
-   "2026 grade list"
-  ],
-  [
-   "necessary",
-   "A helmet is necessary for safety.",
-   "2026 grade list"
-  ],
-  [
-   "separate",
-   "Please separate the paper from the plastic.",
-   "2026 grade list"
-  ],
-  [
-   "achieve",
-   "Hard work can help you achieve your goals.",
-   "2026 grade list"
-  ],
-  [
-   "straight",
-   "Draw a straight line across the page.",
-   "2026 grade list"
-  ],
-  [
-   "height",
-   "We measured the height of the wall.",
-   "2026 grade list"
-  ],
-  [
-   "weight",
-   "The nurse checked the baby’s weight.",
-   "2026 grade list"
-  ],
-  [
-   "weird",
-   "We heard a weird noise outside.",
-   "2026 grade list"
-  ],
-  [
-   "calendar",
-   "Mark the date on your calendar.",
-   "2026 grade list"
-  ],
-  [
-   "grammar",
-   "The teacher explained the grammar rule.",
-   "2026 grade list"
-  ],
-  [
-   "peculiar",
-   "The bird had a peculiar call.",
-   "2026 grade list"
-  ],
-  [
-   "familiar",
-   "Her voice sounded familiar.",
-   "2026 grade list"
-  ]
- ],
- "C": [
-  [
-   "different",
-   "The two paintings look different.",
-   "English 1 examples"
-  ],
-  [
-   "knowledge",
-   "Reading helps us develop knowledge.",
-   "English 1 examples"
-  ],
-  [
-   "adventure",
-   "The hike was a wonderful adventure.",
-   "English 1 examples"
-  ],
-  [
-   "important",
-   "It is important to listen carefully.",
-   "English 1 examples"
-  ],
-  [
-   "education",
-   "Education helps us discover new ideas.",
-   "English 1 examples"
-  ],
-  [
-   "happiness",
-   "Her smile showed her happiness.",
-   "English 1 examples"
-  ],
-  [
-   "beautiful",
-   "The flowers look beautiful today.",
-   "English 1 examples"
-  ],
-  [
-   "information",
-   "The poster gives information about the event.",
-   "English 1 examples"
-  ],
-  [
-   "competition",
-   "Our class entered a spelling competition.",
-   "English 1 examples"
-  ],
-  [
-   "environment",
-   "We must protect our environment.",
-   "English 1 examples"
-  ],
-  [
-   "apparent",
-   "It became apparent that the door was locked.",
-   "2026 grade list"
-  ],
-  [
-   "ancient",
-   "We visited the ruins of an ancient temple.",
-   "2026 grade list"
-  ],
-  [
-   "height",
-   "We measured the height of the wall.",
-   "2026 grade list"
-  ],
-  [
-   "admission",
-   "The museum offers free admission on Fridays.",
-   "2026 grade list"
-  ],
-  [
-   "permission",
-   "Ask for permission before leaving class.",
-   "2026 grade list"
-  ],
-  [
-   "motion",
-   "The teacher explained the motion of the planets.",
-   "2026 grade list"
-  ],
-  [
-   "vision",
-   "Good vision helps us read clearly.",
-   "2026 grade list"
-  ],
-  [
-   "decision",
-   "She made a decision after thinking carefully.",
-   "2026 grade list"
-  ],
-  [
-   "mission",
-   "Their mission was to clean the beach.",
-   "2026 grade list"
-  ],
-  [
-   "discussion",
-   "We had a discussion about the story.",
-   "2026 grade list"
-  ],
-  [
-   "attention",
-   "Pay attention to the instructions.",
-   "2026 grade list"
-  ],
-  [
-   "direction",
-   "The arrow points in the right direction.",
-   "2026 grade list"
-  ],
-  [
-   "instruction",
-   "Follow each instruction on the worksheet.",
-   "2026 grade list"
-  ],
-  [
-   "collection",
-   "He has a collection of stamps.",
-   "2026 grade list"
-  ],
-  [
-   "production",
-   "The factory increased its production of bicycles.",
-   "2026 grade list"
-  ],
-  [
-   "connection",
-   "The bridge provides a connection between the towns.",
-   "2026 grade list"
-  ],
-  [
-   "invention",
-   "The telephone was an important invention.",
-   "2026 grade list"
-  ],
-  [
-   "solution",
-   "We found a solution to the problem.",
-   "2026 grade list"
-  ],
-  [
-   "pollution",
-   "Air pollution can harm our health.",
-   "2026 grade list"
-  ],
-  [
-   "planet",
-   "Earth is the planet we live on.",
-   "2026 grade list"
-  ],
-  [
-   "galaxy",
-   "Our solar system is part of a galaxy.",
-   "2026 grade list"
-  ],
-  [
-   "universe",
-   "Scientists study the universe.",
-   "2026 grade list"
-  ],
-  [
-   "gravity",
-   "Gravity pulls objects toward the ground.",
-   "2026 grade list"
-  ],
-  [
-   "oxygen",
-   "People need oxygen to breathe.",
-   "2026 grade list"
-  ],
-  [
-   "element",
-   "Gold is a chemical element.",
-   "2026 grade list"
-  ],
-  [
-   "biology",
-   "Biology is the study of living things.",
-   "2026 grade list"
-  ],
-  [
-   "geography",
-   "We learned about rivers in geography.",
-   "2026 grade list"
-  ],
-  [
-   "chemistry",
-   "Chemistry helps explain how substances react.",
-   "2026 grade list"
-  ],
-  [
-   "physics",
-   "Physics explains the movement of objects.",
-   "2026 grade list"
-  ],
-  [
-   "astronomy",
-   "Astronomy studies stars and planets.",
-   "2026 grade list"
-  ],
-  [
-   "mathematics",
-   "Mathematics helps us solve number problems.",
-   "2026 grade list"
-  ],
-  [
-   "technology",
-   "Technology helps people communicate.",
-   "2026 grade list"
-  ],
-  [
-   "culture",
-   "Food is part of a community’s culture.",
-   "2026 grade list"
-  ],
-  [
-   "tradition",
-   "Singing together is our family tradition.",
-   "2026 grade list"
-  ],
-  [
-   "heritage",
-   "We learned about our cultural heritage.",
-   "2026 grade list"
-  ],
-  [
-   "identity",
-   "Each student has a unique identity.",
-   "2026 grade list"
-  ],
-  [
-   "community",
-   "Our community planted trees in the park.",
-   "2026 grade list"
-  ],
-  [
-   "society",
-   "People in a society follow shared rules.",
-   "2026 grade list"
-  ],
-  [
-   "government",
-   "The government built a new bridge.",
-   "2026 grade list"
-  ],
-  [
-   "democracy",
-   "In a democracy, citizens can vote.",
-   "2026 grade list"
-  ],
-  [
-   "itinerary",
-   "Our travel itinerary includes two museums.",
-   "2026 grade list"
-  ],
-  [
-   "souvenir",
-   "I bought a souvenir at the market.",
-   "2026 grade list"
-  ],
-  [
-   "destination",
-   "The train reached its destination.",
-   "2026 grade list"
-  ],
-  [
-   "expedition",
-   "The expedition crossed the mountains.",
-   "2026 grade list"
-  ],
-  [
-   "voyage",
-   "The ship began a long voyage.",
-   "2026 grade list"
-  ],
-  [
-   "discovery",
-   "The discovery amazed the young explorer.",
-   "2026 grade list"
-  ],
-  [
-   "navigation",
-   "The sailors used stars for navigation.",
-   "2026 grade list"
-  ],
-  [
-   "achieve",
-   "Hard work can help you achieve your goals.",
-   "2026 grade list"
-  ],
-  [
-   "succeed",
-   "Practice can help you succeed.",
-   "2026 grade list"
-  ],
-  [
-   "comfortable",
-   "The new chair is comfortable.",
-   "2026 grade list"
-  ],
-  [
-   "dangerous",
-   "Swimming in a storm is dangerous.",
-   "2026 grade list"
-  ],
-  [
-   "grateful",
-   "We were grateful for their kindness.",
-   "2026 grade list"
-  ],
-  [
-   "thoughtful",
-   "He wrote a thoughtful thank-you note.",
-   "2026 grade list"
-  ],
-  [
-   "serious",
-   "The doctor spoke in a serious voice.",
-   "2026 grade list"
-  ],
-  [
-   "although",
-   "Although it rained, we still played indoors.",
-   "2026 grade list"
-  ],
-  [
-   "however",
-   "The road was crowded; however, we arrived on time.",
-   "2026 grade list"
-  ],
-  [
-   "therefore",
-   "It was raining; therefore, we stayed inside.",
-   "2026 grade list"
-  ],
-  [
-   "business",
-   "My aunt runs a small business.",
-   "2026 grade list"
-  ],
-  [
-   "taught",
-   "Our teacher taught us a new song.",
-   "2026 grade list"
-  ],
-  [
-   "caught",
-   "The goalkeeper caught the ball.",
-   "2026 grade list"
-  ],
-  [
-   "future",
-   "She hopes to become a scientist in the future.",
-   "2026 grade list"
-  ],
-  [
-   "cylinder",
-   "The can has the shape of a cylinder.",
-   "2026 grade list"
-  ],
-  [
-   "sphere",
-   "A ball is shaped like a sphere.",
-   "2026 grade list"
-  ],
-  [
-   "pyramid",
-   "We made a model of a pyramid.",
-   "2026 grade list"
-  ],
-  [
-   "magnificent",
-   "The magnificent palace stood beside the river.",
-   "2026 grade list"
-  ],
-  [
-   "courageous",
-   "The courageous rescuer helped the child.",
-   "2026 grade list"
-  ],
-  [
-   "mysterious",
-   "We heard a mysterious sound at night.",
-   "2026 grade list"
-  ],
-  [
-   "extraordinary",
-   "The student showed extraordinary talent.",
-   "2026 grade list"
-  ],
-  [
-   "remarkable",
-   "Her progress was remarkable.",
-   "2026 grade list"
-  ],
-  [
-   "curiosity",
-   "His curiosity led to many questions.",
-   "2026 grade list"
-  ],
-  [
-   "challenge",
-   "The difficult hike was a challenge.",
-   "2026 grade list"
-  ],
-  [
-   "pronunciation",
-   "We practiced the pronunciation of new words.",
-   "2026 grade list"
-  ],
-  [
-   "celebration",
-   "The celebration began with music.",
-   "2026 grade list"
-  ],
-  [
-   "cooperation",
-   "Teamwork requires cooperation.",
-   "2026 grade list"
-  ],
-  [
-   "organization",
-   "The organization provides books to schools.",
-   "2026 grade list"
-  ],
-  [
-   "achievement",
-   "Finishing the marathon was a great achievement.",
-   "2026 grade list"
-  ],
-  [
-   "opportunity",
-   "The trip gave us an opportunity to learn.",
-   "2026 grade list"
-  ],
-  [
-   "possibility",
-   "There is a possibility of rain tomorrow.",
-   "2026 grade list"
-  ],
-  [
-   "creativity",
-   "Painting helps develop creativity.",
-   "2026 grade list"
-  ],
-  [
-   "innovation",
-   "The new invention was an example of innovation.",
-   "2026 grade list"
-  ],
-  [
-   "determination",
-   "Her determination helped her finish the race.",
-   "2026 grade list"
-  ],
-  [
-   "confidence",
-   "Practice improved his confidence.",
-   "2026 grade list"
-  ],
-  [
-   "independence",
-   "The country celebrated its independence.",
-   "2026 grade list"
-  ],
-  [
-   "experience",
-   "The museum visit was a memorable experience.",
-   "2026 grade list"
-  ],
-  [
-   "development",
-   "The development of the new park took a year.",
-   "2026 grade list"
-  ],
-  [
-   "fraction",
-   "One half is an example of a fraction.",
-   "2026 grade list"
-  ],
-  [
-   "circulation",
-   "Exercise improves blood circulation.",
-   "2026 grade list"
-  ],
-  [
-   "organism",
-   "A mushroom is a living organism.",
-   "2026 grade list"
-  ],
-  [
-   "ecosystem",
-   "The forest is a complex ecosystem.",
-   "2026 grade list"
-  ],
-  [
-   "atmosphere",
-   "The Earth’s atmosphere contains gases.",
-   "2026 grade list"
-  ],
-  [
-   "diameter",
-   "Measure the diameter of the circle.",
-   "2026 grade list"
-  ],
-  [
-   "occurrence",
-   "Snow is a rare occurrence in tropical cities.",
-   "2026 grade list"
-  ],
-  [
-   "symmetry",
-   "The butterfly’s wings show symmetry.",
-   "2026 grade list"
-  ],
-  [
-   "hypothesis",
-   "The students tested a hypothesis in science class.",
-   "2026 grade list"
-  ],
-  [
-   "peninsula",
-   "A peninsula is surrounded by water on three sides.",
-   "2026 grade list"
-  ],
-  [
-   "necessary",
-   "A helmet is necessary for safety.",
-   "2026 grade list"
-  ],
-  [
-   "archaeology",
-   "Archaeology helps us study ancient cultures.",
-   "2026 grade list"
-  ],
-  [
-   "altitude",
-   "The airplane reached a high altitude.",
-   "2026 grade list"
-  ],
-  [
-   "hierarchy",
-   "The chart showed a hierarchy of roles.",
-   "2026 grade list"
-  ],
-  [
-   "technique",
-   "The artist demonstrated a painting technique.",
-   "2026 grade list"
-  ],
-  [
-   "restaurant",
-   "Our family ate at the restaurant.",
-   "2026 grade list"
-  ],
-  [
-   "separate",
-   "Please separate the paper from the plastic.",
-   "2026 grade list"
-  ],
-  [
-   "definitely",
-   "I will definitely finish my homework.",
-   "2026 grade list"
-  ],
-  [
-   "guarantee",
-   "A ticket does not guarantee a good seat.",
-   "2026 grade list"
-  ],
-  [
-   "privilege",
-   "It is a privilege to represent our school.",
-   "2026 grade list"
-  ],
-  [
-   "embarrassment",
-   "She smiled despite her embarrassment.",
-   "2026 grade list"
-  ],
-  [
-   "accommodation",
-   "We booked accommodation near the beach.",
-   "2026 grade list"
-  ],
-  [
-   "exaggerate",
-   "Please do not exaggerate the story.",
-   "2026 grade list"
-  ],
-  [
-   "recommendation",
-   "Her recommendation helped me choose a book.",
-   "2026 grade list"
-  ],
-  [
-   "questionnaire",
-   "The students answered a questionnaire.",
-   "2026 grade list"
-  ],
-  [
-   "maintenance",
-   "The pool is closed for maintenance.",
-   "2026 grade list"
-  ],
-  [
-   "rhythm",
-   "The drummer kept a steady rhythm.",
-   "2026 grade list"
-  ],
-  [
-   "mnemonic",
-   "A mnemonic can help you remember facts.",
-   "2026 grade list"
-  ],
-  [
-   "physique",
-   "The athlete developed a strong physique.",
-   "2026 grade list"
-  ],
-  [
-   "architecture",
-   "The building’s architecture is impressive.",
-   "2026 grade list"
-  ],
-  [
-   "literature",
-   "We read classic literature in class.",
-   "2026 grade list"
-  ],
-  [
-   "biodiversity",
-   "The rainforest has rich biodiversity.",
-   "2026 grade list"
-  ],
-  [
-   "conservation",
-   "Wildlife conservation helps protect animals.",
-   "2026 grade list"
-  ],
-  [
-   "sustainability",
-   "The class discussed environmental sustainability.",
-   "2026 grade list"
-  ],
-  [
-   "renewable",
-   "Solar power is a renewable source of energy.",
-   "2026 grade list"
-  ],
-  [
-   "habitat",
-   "The forest is a habitat for many animals.",
-   "2026 grade list"
-  ],
-  [
-   "responsibility",
-   "Caring for a pet is a responsibility.",
-   "2026 grade list"
-  ],
-  [
-   "authority",
-   "The principal has authority at the school.",
-   "2026 grade list"
-  ],
-  [
-   "imagination",
-   "Use your imagination to create a story.",
-   "2026 grade list"
-  ],
-  [
-   "motivation",
-   "Her motivation helped her keep practicing.",
-   "2026 grade list"
-  ],
-  [
-   "communication",
-   "Clear communication is important in a team.",
-   "2026 grade list"
-  ],
-  [
-   "collaboration",
-   "The project required collaboration.",
-   "2026 grade list"
-  ],
-  [
-   "volcano",
-   "The volcano erupted last year.",
-   "2026 grade list"
-  ],
-  [
-   "glacier",
-   "The glacier moved slowly down the valley.",
-   "2026 grade list"
-  ],
-  [
-   "archipelago",
-   "Indonesia is an archipelago.",
-   "2026 grade list"
-  ],
-  [
-   "hemisphere",
-   "Indonesia lies in both hemispheres.",
-   "2026 grade list"
-  ],
-  [
-   "equator",
-   "The equator crosses Indonesia.",
-   "2026 grade list"
-  ],
-  [
-   "latitude",
-   "The map shows the latitude of the city.",
-   "2026 grade list"
-  ],
-  [
-   "longitude",
-   "The map shows the longitude of the island.",
-   "2026 grade list"
-  ],
-  [
-   "orchestra",
-   "The orchestra performed a song.",
-   "2026 grade list"
-  ],
-  [
-   "melody",
-   "She played a gentle melody on the piano.",
-   "2026 grade list"
-  ],
-  [
-   "harmony",
-   "The choir sang in harmony.",
-   "2026 grade list"
-  ],
-  [
-   "algorithm",
-   "The computer follows an algorithm.",
-   "2026 grade list"
-  ],
-  [
-   "database",
-   "The library uses a database of books.",
-   "2026 grade list"
-  ],
-  [
-   "software",
-   "The computer needs software to run.",
-   "2026 grade list"
-  ]
- ]
+"use strict";
+const RAW_BANKS = {"new120":[{"word":"platform","sentence":"The train will leave from platform three.","origin":"New 120-word list"},{"word":"salmon","sentence":"A bear waits patiently to catch salmon swimming up river.","origin":"New 120-word list"},{"word":"property","sentence":"The sign on the gate says private property.","origin":"New 120-word list"},{"word":"fraction","sentence":"You can buy it online for a fraction of the cost.","origin":"New 120-word list"},{"word":"citizen","sentence":"He is an American citizen but his parents are both Mexican.","origin":"New 120-word list"},{"word":"reproduce","sentence":"The printer can reproduce the image clearly.","origin":"New 120-word list"},{"word":"replace","sentence":"It's not broken. Just replace the batteries.","origin":"New 120-word list"},{"word":"childish","sentence":"Stop being childish; act your age.","origin":"New 120-word list"},{"word":"scandal","sentence":"The newspaper released details of the scandal.","origin":"New 120-word list"},{"word":"grateful","sentence":"He was grateful for all of the support.","origin":"New 120-word list"},{"word":"orphan","sentence":"An orphan is someone with no parents.","origin":"New 120-word list"},{"word":"average","sentence":"An average person sleeps for about eight hours.","origin":"New 120-word list"},{"word":"chief","sentence":"The police chief is the highest ranking police officer in the city.","origin":"New 120-word list"},{"word":"iron","sentence":"It's important to iron your clothes after washing them.","origin":"New 120-word list"},{"word":"amnesia","sentence":"I must have amnesia, I don't remember anything!","origin":"New 120-word list"},{"word":"wacky","sentence":"I wasn't expecting her wacky behaviour.","origin":"New 120-word list"},{"word":"calcium","sentence":"Eating yogurt every day gives your body the calcium it needs.","origin":"New 120-word list"},{"word":"felon","sentence":"A felon is someone convicted of a serious crime.","origin":"New 120-word list"},{"word":"experiment","sentence":"The scientist conducted an experiment to test his theory.","origin":"New 120-word list"},{"word":"quickest","sentence":"He won the race because he was the quickest.","origin":"New 120-word list"},{"word":"dictionary","sentence":"You can't use a dictionary during the spelling bee.","origin":"New 120-word list"},{"word":"collarbone","sentence":"When you break your collarbone it is very painful.","origin":"New 120-word list"},{"word":"simplify","sentence":"The teacher used a picture to simplify his explanation.","origin":"New 120-word list"},{"word":"puncture","sentence":"She had to change her bicycle tire after she had a puncture.","origin":"New 120-word list"},{"word":"handwriting","sentence":"I try to type because I have terrible handwriting.","origin":"New 120-word list"},{"word":"luxury","sentence":"We stayed in a five-star luxury hotel.","origin":"New 120-word list"},{"word":"refuse","sentence":"I'll refuse to speak to him again until he says sorry.","origin":"New 120-word list"},{"word":"report","sentence":"I watched a news report on TV.","origin":"New 120-word list"},{"word":"meteor","sentence":"We saw a meteor in the sky.","origin":"New 120-word list"},{"word":"thief","sentence":"A thief belongs in prison.","origin":"New 120-word list"},{"word":"policeman","sentence":"The policeman ran after the bag-snatcher.","origin":"New 120-word list"},{"word":"rotate","sentence":"The manager said she will rotate the players so everyone gets a game.","origin":"New 120-word list"},{"word":"proper","sentence":"What is the proper way to say this in Spanish?","origin":"New 120-word list"},{"word":"absent","sentence":"The class was cancelled because the teacher was absent.","origin":"New 120-word list"},{"word":"mosquito","sentence":"My mosquito bite is really itchy.","origin":"New 120-word list"},{"word":"science","sentence":"If you want to be a doctor you need to do well in science.","origin":"New 120-word list"},{"word":"bubble","sentence":"The warm bubble bath was relaxing.","origin":"New 120-word list"},{"word":"service","sentence":"The service at the hotel was incredible.","origin":"New 120-word list"},{"word":"support","sentence":"She worked two jobs to support her family.","origin":"New 120-word list"},{"word":"cucumber","sentence":"I had tuna and cucumber sandwiches for lunch.","origin":"New 120-word list"},{"word":"country","sentence":"My ambition is to visit every country in Europe.","origin":"New 120-word list"},{"word":"fantasy","sentence":"I find fantasy novels really exciting.","origin":"New 120-word list"},{"word":"freedom","sentence":"The gladiator eventually won his freedom.","origin":"New 120-word list"},{"word":"reflect","sentence":"Sunlight can reflect off glass.","origin":"New 120-word list"},{"word":"nuclear","sentence":"Some people worry about the safety of nuclear power.","origin":"New 120-word list"},{"word":"manual","sentence":"The drone came with a very useful user manual.","origin":"New 120-word list"},{"word":"regular","sentence":"We ordered a regular sized, cheese pizza.","origin":"New 120-word list"},{"word":"decade","sentence":"A decade is a ten year period.","origin":"New 120-word list"},{"word":"conflict","sentence":"They solved their conflict through negotiations.","origin":"New 120-word list"},{"word":"comedy","sentence":"I love to watch stand up comedy.","origin":"New 120-word list"},{"word":"kidnap","sentence":"They threatened to kidnap the governor's daughter.","origin":"New 120-word list"},{"word":"customer","sentence":"They say that the customer is always right.","origin":"New 120-word list"},{"word":"record","sentence":"I have to record a short video presentation for my homework.","origin":"New 120-word list"},{"word":"ladder","sentence":"The firefighter used a ladder to reach the balcony.","origin":"New 120-word list"},{"word":"perform","sentence":"I can't wait to see the band perform live.","origin":"New 120-word list"},{"word":"crystal","sentence":"The fortune teller looked into the crystal ball.","origin":"New 120-word list"},{"word":"harvest","sentence":"Farmers harvest their crops in late summer.","origin":"New 120-word list"},{"word":"silence","sentence":"Hush. Silence please.","origin":"New 120-word list"},{"word":"wooden","sentence":"A wooden house is not as strong as brick.","origin":"New 120-word list"},{"word":"sneeze","sentence":"Cover your mouth and nose when you sneeze.","origin":"New 120-word list"},{"word":"parent","sentence":"Being a parent is a big responsibility.","origin":"New 120-word list"},{"word":"divide","sentence":"Divide the sweets between the three of you.","origin":"New 120-word list"},{"word":"feather","sentence":"I found a feather under the bird's nest.","origin":"New 120-word list"},{"word":"quilt","sentence":"A thick quilt keeps me warm in bed.","origin":"New 120-word list"},{"word":"roast","sentence":"We will have roast chicken for dinner.","origin":"New 120-word list"},{"word":"mailbox","sentence":"The mailbox was empty because the postman hadn't been.","origin":"New 120-word list"},{"word":"peaceful","sentence":"I like living in the countryside because it is peaceful.","origin":"New 120-word list"},{"word":"elbow","sentence":"I hurt my elbow when I fell.","origin":"New 120-word list"},{"word":"pickle","sentence":"I always take the pickle out of my burger.","origin":"New 120-word list"},{"word":"centipede","sentence":"The centipede crawled under the rock on its many legs.","origin":"New 120-word list"},{"word":"skinny","sentence":"The skinny tree had only a few branches.","origin":"New 120-word list"},{"word":"syrup","sentence":"Maple syrup tastes great on waffles.","origin":"New 120-word list"},{"word":"gymnast","sentence":"A gymnast has to be in very good shape.","origin":"New 120-word list"},{"word":"joke","sentence":"I didn't laugh at her joke because it wasn't funny.","origin":"New 120-word list"},{"word":"rubber","sentence":"Erasers are made of rubber.","origin":"New 120-word list"},{"word":"escape","sentence":"Our dog keeps trying to escape from the yard.","origin":"New 120-word list"},{"word":"cash","sentence":"I need some cash to pay for my lunch.","origin":"New 120-word list"},{"word":"couch","sentence":"My father likes to rest on the couch after dinner.","origin":"New 120-word list"},{"word":"chimpanzee","sentence":"A chimpanzee likes to climb trees.","origin":"New 120-word list"},{"word":"shellfish","sentence":"My cousin got very sick from eating shellfish.","origin":"New 120-word list"},{"word":"junkyard","sentence":"We went to the junkyard and got rid of our old furniture.","origin":"New 120-word list"},{"word":"toothpaste","sentence":"Some people don't like mint flavoured toothpaste.","origin":"New 120-word list"},{"word":"gorgeous","sentence":"The new princess is gorgeous.","origin":"New 120-word list"},{"word":"cherry","sentence":"Cherry pie is my favourite dessert.","origin":"New 120-word list"},{"word":"kayak","sentence":"A kayak is very difficult to steer in rough water.","origin":"New 120-word list"},{"word":"violin","sentence":"I'm learning to play the violin.","origin":"New 120-word list"},{"word":"sandpit","sentence":"We played in a sandpit at the park.","origin":"New 120-word list"},{"word":"lesson","sentence":"I have an extra math lesson after school.","origin":"New 120-word list"},{"word":"difficult","sentence":"This isn't difficult. It's quite easy.","origin":"New 120-word list"},{"word":"cheese","sentence":"The cheese was smelly because it was left out of the refrigerator.","origin":"New 120-word list"},{"word":"refund","sentence":"The T-shirt didn't fit me so I took it back to the store and got a refund.","origin":"New 120-word list"},{"word":"borrow","sentence":"I often borrow books from the library.","origin":"New 120-word list"},{"word":"umbrella","sentence":"Take your umbrella because the forecast says it will rain later.","origin":"New 120-word list"},{"word":"rubbish","sentence":"Please put your rubbish in the bin.","origin":"New 120-word list"},{"word":"spider","sentence":"A spider has eight legs.","origin":"New 120-word list"},{"word":"carbon","sentence":"We should all try to reduce our carbon footprint.","origin":"New 120-word list"},{"word":"planet","sentence":"Mercury is the closest planet to the sun.","origin":"New 120-word list"},{"word":"peanut","sentence":"I had a peanut and jelly sandwich.","origin":"New 120-word list"},{"word":"hospital","sentence":"I went to hospital when I broke my arm.","origin":"New 120-word list"},{"word":"mountain","sentence":"We reached the top of the mountain at sunrise.","origin":"New 120-word list"},{"word":"illness","sentence":"I didn't go to school because of my illness.","origin":"New 120-word list"},{"word":"castle","sentence":"A king and queen live in a castle.","origin":"New 120-word list"},{"word":"jungle","sentence":"The lion is the king of the jungle.","origin":"New 120-word list"},{"word":"dentist","sentence":"You should visit the dentist if you have toothache.","origin":"New 120-word list"},{"word":"elephant","sentence":"A baby elephant is called a calf.","origin":"New 120-word list"},{"word":"sausage","sentence":"He fed the dog a sausage.","origin":"New 120-word list"},{"word":"sandwich","sentence":"Take a sandwich in case you get hungry.","origin":"New 120-word list"},{"word":"helmet","sentence":"You must wear a helmet when you ride your bike.","origin":"New 120-word list"},{"word":"dinner","sentence":"I ate a big lunch so let's have dinner later.","origin":"New 120-word list"},{"word":"hammer","sentence":"Pass me the hammer, please. It's next to the screwdriver.","origin":"New 120-word list"},{"word":"resource","sentence":"Oil is a finite resource.","origin":"New 120-word list"},{"word":"password","sentence":"I forgot my email password.","origin":"New 120-word list"},{"word":"double","sentence":"There were double the number of people expected at the party.","origin":"New 120-word list"},{"word":"midnight","sentence":"At midnight they celebrated the new year.","origin":"New 120-word list"},{"word":"gravity","sentence":"Without Earth's gravity, we would all float away.","origin":"New 120-word list"},{"word":"kitchen","sentence":"The kitchen is next to the living room.","origin":"New 120-word list"},{"word":"chocolate","sentence":"Would you like chocolate or vanilla ice-cream?","origin":"New 120-word list"},{"word":"scratch","sentence":"Don't get close to the cat. It might scratch you.","origin":"New 120-word list"},{"word":"soldier","sentence":"The brave soldier received a medal.","origin":"New 120-word list"},{"word":"library","sentence":"I borrowed a book from the library.","origin":"New 120-word list"}],"thesaurusIntro":[{"word":"Thesaurus","sentence":"I used a thesaurus to find a synonym for the word.","origin":"Thesaurus · Section 1"},{"word":"Lights","sentence":"The stage lights turned on just before the performance began.","origin":"Thesaurus · Section 1"},{"word":"Eastern","sentence":"The sun rises in the eastern part of the sky.","origin":"Thesaurus · Section 1"},{"word":"Impressive","sentence":"The athlete gave an impressive performance and broke the school record.","origin":"Thesaurus · Section 1"},{"word":"Benefit","sentence":"Regular exercise can benefit both your physical and mental health.","origin":"Thesaurus · Section 1"},{"word":"Functional","sentence":"After the screen broke, the phone was no longer functional.","origin":"Thesaurus · Section 1"},{"word":"Redeem","sentence":"He wanted to redeem himself after making a mistake.","origin":"Thesaurus · Section 1"},{"word":"Engagement","sentence":"The couple announced their engagement to their families.","origin":"Thesaurus · Section 1"},{"word":"Whisper","sentence":"Please whisper in the library so you do not disturb the other readers.","origin":"Thesaurus · Section 1"},{"word":"Abstract","sentence":"The artist used abstract shapes and colors instead of painting real objects.","origin":"Thesaurus · Section 1"},{"word":"Profound","sentence":"The book had a profound message about kindness and how our actions affect others.","origin":"Thesaurus · Section 1"},{"word":"Occupation","sentence":"An occupation is a job or type of work that a person does.","origin":"Thesaurus · Section 1"},{"word":"Permanent","sentence":"The mark was permanent, so it could not be removed with an ordinary eraser.","origin":"Thesaurus · Section 1"},{"word":"Paragraph","sentence":"Write one paragraph explaining why you enjoyed the book.","origin":"Thesaurus · Section 1"},{"word":"Feminine","sentence":"The word feminine describes qualities associated with women or girls.","origin":"Thesaurus · Section 1"}],"thesaurusA":[{"word":"dinosaur","sentence":"I hope that some day we will be able to see a dinosaur at the zoo.","origin":"Thesaurus · Group A"},{"word":"smash","sentence":"Please don't smash anything in the house with that rock!","origin":"Thesaurus · Group A"},{"word":"bouncy","sentence":"I wanted to jump on the bed, but it wasn't very bouncy.","origin":"Thesaurus · Group A"},{"word":"author","sentence":"The author of the book was very famous.","origin":"Thesaurus · Group A"},{"word":"filthy","sentence":"Clean your room - it's filthy!","origin":"Thesaurus · Group A"},{"word":"heather","sentence":"The heather was flowering last time I visited the Scottish isles.","origin":"Thesaurus · Group A"},{"word":"ugliest","sentence":"This brown shirt is the ugliest one I own.","origin":"Thesaurus · Group A"},{"word":"icicle","sentence":"A large icicle hung from the roof all winter.","origin":"Thesaurus · Group A"},{"word":"lace","sentence":"There was a lot of lace on her fancy dress.","origin":"Thesaurus · Group A"},{"word":"prickly","sentence":"Be careful of prickly plants and animals in the desert.","origin":"Thesaurus · Group A"},{"word":"swimsuit","sentence":"I can't go swimming because I didn't bring my swimsuit.","origin":"Thesaurus · Group A"},{"word":"stomach","sentence":"My stomach hurts because I ate two gallons of ice cream for breakfast.","origin":"Thesaurus · Group A"},{"word":"scarecrow","sentence":"The farmer used a scarecrow in his fields to protect his crops.","origin":"Thesaurus · Group A"},{"word":"furniture","sentence":"All of the furniture in my house is very comfortable.","origin":"Thesaurus · Group A"},{"word":"gorilla","sentence":"The baby gorilla was very cute, but his mother looked dangerous!","origin":"Thesaurus · Group A"},{"word":"pearl","sentence":"At the bottom of the ocean I found a pearl inside an oyster.","origin":"Thesaurus · Group A"},{"word":"aquarium","sentence":"In my bedroom I have three fish in an aquarium.","origin":"Thesaurus · Group A"},{"word":"angle","sentence":"To play pool well, it's important you understand the angle of the ball.","origin":"Thesaurus · Group A"},{"word":"spotless","sentence":"I just washed my car, and it is spotless!","origin":"Thesaurus · Group A"},{"word":"harmony","sentence":"The world would be a better place if everyone could live in harmony.","origin":"Thesaurus · Group A"},{"word":"hospitable","sentence":"I visited my friend in a different country and he was very hospitable.","origin":"Thesaurus · Group A"},{"word":"porter","sentence":"The porter at the train station helped me carry my bags.","origin":"Thesaurus · Group A"},{"word":"ambulance","sentence":"If you feel very sick, you might need to call an ambulance.","origin":"Thesaurus · Group A"},{"word":"scissors","sentence":"He cut the paper with his scissors.","origin":"Thesaurus · Group A"},{"word":"quicksand","sentence":"When you're walking in the jungle, be careful of quicksand or you might get stuck!","origin":"Thesaurus · Group A"},{"word":"farmer","sentence":"The farmer drove his fruits and vegetables one hour to the market every week.","origin":"Thesaurus · Group A"},{"word":"travel","sentence":"I love to travel to new and exciting places.","origin":"Thesaurus · Group A"},{"word":"accurate","sentence":"When doing math, you must be careful to be accurate or you will get the wrong answer.","origin":"Thesaurus · Group A"},{"word":"direct","sentence":"A direct flight will take you where you want to go without stopping at a different airport.","origin":"Thesaurus · Group A"},{"word":"polite","sentence":"Please be polite when you meet new people - rudeness will get you nowhere!","origin":"Thesaurus · Group A"},{"word":"glossy","sentence":"A glossy photo looks more professional than one printed on normal paper.","origin":"Thesaurus · Group A"},{"word":"charming","sentence":"The prince was very charming, and won the love of the princess.","origin":"Thesaurus · Group A"},{"word":"muscle","sentence":"Every muscle in my body hurt after playing football all day.","origin":"Thesaurus · Group A"}],"thesaurusB":[{"word":"elegant","sentence":"She wore an elegant dress to the wedding.","origin":"Thesaurus · Group B"},{"word":"invincible","sentence":"Superman is basically invincible - except for kryptonite!","origin":"Thesaurus · Group B"},{"word":"spacious","sentence":"Even with a very large desk and several chairs, the office seemed spacious.","origin":"Thesaurus · Group B"},{"word":"seashore","sentence":"Sally sells seashells by the seashore.","origin":"Thesaurus · Group B"},{"word":"wrestle","sentence":"I'm not going to play in the basketball game, because I need to wrestle in a match.","origin":"Thesaurus · Group B"},{"word":"dreadful","sentence":"I felt absolutely dreadful when I caught the flu.","origin":"Thesaurus · Group B"},{"word":"breakable","sentence":"I learned the toy was breakable the hard way, when I dropped it.","origin":"Thesaurus · Group B"},{"word":"mature","sentence":"He seemed very mature, even though he was younger than his classmates.","origin":"Thesaurus · Group B"},{"word":"embarrass","sentence":"Hopefully Mom and Dad won't embarrass you by cheering too loudly.","origin":"Thesaurus · Group B"},{"word":"triangular","sentence":"The flag was triangular, so it only had three sides instead of four.","origin":"Thesaurus · Group B"},{"word":"chunky","sentence":"I like chunky soup, with plenty of vegetable.","origin":"Thesaurus · Group B"},{"word":"parallel","sentence":"The train tracks ran parallel to the road, never crossing each other.","origin":"Thesaurus · Group B"},{"word":"quaint","sentence":"The little village was quaint and felt like it hadn't changed in 100 years.","origin":"Thesaurus · Group B"},{"word":"cautious","sentence":"Be cautious when you cross the street - drivers can be crazy!","origin":"Thesaurus · Group B"},{"word":"injure","sentence":"Try not to injure yourself when you play sports, or you'll have to sit out for a while.","origin":"Thesaurus · Group B"},{"word":"courageous","sentence":"The soldier was courageous in battle, and was given a medal for it.","origin":"Thesaurus · Group B"},{"word":"hysterical","sentence":"She was so upset, she was practically hysterical. We couldn't calm her down!","origin":"Thesaurus · Group B"},{"word":"superficial","sentence":"Don't be superficial and judge people on appearances.","origin":"Thesaurus · Group B"},{"word":"deranged","sentence":"The man who stole my wallet was clearly deranged.","origin":"Thesaurus · Group B"},{"word":"glamorous","sentence":"The movie stars all looked glamorous on the red carpet.","origin":"Thesaurus · Group B"},{"word":"boundless","sentence":"When I decided to leave my hometown, I felt the possibilities were boundless.","origin":"Thesaurus · Group B"},{"word":"vague","sentence":"I didn't understand what he meant as his statement had been very vague.","origin":"Thesaurus · Group B"},{"word":"fascinated","sentence":"I'm fascinated by how machines work.","origin":"Thesaurus · Group B"},{"word":"machinery","sentence":"The heavy machinery in the factory had to be replaced once it got rusty.","origin":"Thesaurus · Group B"},{"word":"euphoria","sentence":"I felt a sense of euphoria as I finally got to the top of the mountain.","origin":"Thesaurus · Group B"},{"word":"quiche","sentence":"I've run out of eggs, so I won't be able to bake a quiche today.","origin":"Thesaurus · Group B"},{"word":"doubtful","sentence":"It's doubtful that my team can win the match now that they've conceded two goals.","origin":"Thesaurus · Group B"},{"word":"placid","sentence":"The lake was placid, with no waves or any movement at all.","origin":"Thesaurus · Group B"},{"word":"bruise","sentence":"You'll have a big bruise on your leg where you fell down.","origin":"Thesaurus · Group B"},{"word":"adorable","sentence":"The puppies were just adorable, but soon they would be huge, dangerous dogs.","origin":"Thesaurus · Group B"},{"word":"delightful","sentence":"The weather has been delightful - sunny with a light breeze every day this week!","origin":"Thesaurus · Group B"},{"word":"blizzard","sentence":"Make sure you have enough food at home when the blizzard comes, or you might go hungry.","origin":"Thesaurus · Group B"},{"word":"bizarre","sentence":"I had a bizarre dream last night - it didn't make any sense!","origin":"Thesaurus · Group B"},{"word":"scrawny","sentence":"Even though he tried to exercise every day to get big and strong, he still looked scrawny.","origin":"Thesaurus · Group B"},{"word":"screech","sentence":"The animal let out a loud screech, which you could hear a mile away.","origin":"Thesaurus · Group B"}],"thesaurusC":[{"word":"belligerent","sentence":"He is a belligerent old man. Everyone feels threatened by him.","origin":"Thesaurus · Group C"},{"word":"juvenile","sentence":"The juvenile bird followed its parent across the grass.","origin":"Thesaurus · Group C"},{"word":"circular","sentence":"A frisbee is circular in shape.","origin":"Thesaurus · Group C"},{"word":"victorious","sentence":"They were victorious in battle.","origin":"Thesaurus · Group C"},{"word":"tightfisted","sentence":"He never likes to spend money. He is tightfisted.","origin":"Thesaurus · Group C"},{"word":"discreet","sentence":"Please be discreet with this information. Don't share it with anyone else.","origin":"Thesaurus · Group C"},{"word":"appropriateness","sentence":"I am not sure of the appropriateness of some of these sentences.","origin":"Thesaurus · Group C"},{"word":"eradicate","sentence":"We need to eradicate all types of racism.","origin":"Thesaurus · Group C"},{"word":"dissimilar","sentence":"They don't look totally dissimilar but you could still tell the difference.","origin":"Thesaurus · Group C"},{"word":"schmuck","sentence":"A schmuck is a contemptible or foolish person.","origin":"Thesaurus · Group C"},{"word":"mistletoe","sentence":"In some countries it is tradition to hang mistletoe at Christmas time.","origin":"Thesaurus · Group C"},{"word":"Rottweiler","sentence":"I don't want a big dog like a Rottweiler. I would prefer a poodle.","origin":"Thesaurus · Group C"},{"word":"alluring","sentence":"The ice-cream shop was very alluring on such a hot day.","origin":"Thesaurus · Group C"},{"word":"accommodation","sentence":"A house, apartment or boarding house are options for accommodation.","origin":"Thesaurus · Group C"},{"word":"incandescent","sentence":"The incandescent lightbulb was invented in the nineteenth century.","origin":"Thesaurus · Group C"},{"word":"lackadaisical","sentence":"The players' lackadaisical approach meant that they lost 5-0. They should try harder next game.","origin":"Thesaurus · Group C"},{"word":"bureaucracy","sentence":"The problem of bureaucracy is that decision making takes time.","origin":"Thesaurus · Group C"},{"word":"condemned","sentence":"His lack of education condemned him to a life of manual labour.","origin":"Thesaurus · Group C"},{"word":"beige","sentence":"The brown carpet is too dark. I would prefer it in beige.","origin":"Thesaurus · Group C"},{"word":"mistaken","sentence":"It was a case of mistaken identity. They arrested the wrong person.","origin":"Thesaurus · Group C"},{"word":"whimsical","sentence":"He has a whimsical sense of humour.","origin":"Thesaurus · Group C"},{"word":"materialistic","sentence":"She always wants to show off by having the most up-to-date gadgets. She's so materialistic.","origin":"Thesaurus · Group C"},{"word":"noxious","sentence":"Miners need to be careful of noxious gasses while they are underground.","origin":"Thesaurus · Group C"},{"word":"conviction","sentence":"The prosecutor is hoping for a conviction.","origin":"Thesaurus · Group C"},{"word":"acquitted","sentence":"She was acquitted of the charges after new evidence was found.","origin":"Thesaurus · Group C"},{"word":"ambidextrous","sentence":"He was ambidextrous since birth, but tended to use his right hand when writing.","origin":"Thesaurus · Group C"},{"word":"synonymous","sentence":"His name was synonymous with wealth - everyone knew he had money.","origin":"Thesaurus · Group C"},{"word":"biased","sentence":"My musical tastes are biased towards older, classic artists.","origin":"Thesaurus · Group C"},{"word":"opaque","sentence":"The windows had become opaque with soot, and my view of the river was now completely obscured.","origin":"Thesaurus · Group C"},{"word":"destination","sentence":"It is often said that the journey is more important than the destination.","origin":"Thesaurus · Group C"},{"word":"adjustment","sentence":"I made an adjustment to my stance, and now I can hit the ball much farther.","origin":"Thesaurus · Group C"},{"word":"expensive","sentence":"I never go to expensive restaurants, as I prefer to save my money.","origin":"Thesaurus · Group C"},{"word":"stethoscope","sentence":"The doctor's stethoscope was always around his neck, except on that fateful day, the one time he truly needed it.","origin":"Thesaurus · Group C"},{"word":"scandalous","sentence":"The news about my favorite movie star was simply scandalous! I can't believe she would do that!","origin":"Thesaurus · Group C"},{"word":"ambience","sentence":"The relaxed ambience of the restaurant made everyone feel very comfortable.","origin":"Thesaurus · Group C"}],"originalB":[{"word":"rainbow","sentence":"After the rain, we can see a rainbow.","origin":"Original · Group B (Grades 3–4)"},{"word":"library","sentence":"We borrowed a storybook from the library.","origin":"Original · Group B (Grades 3–4)"},{"word":"scientist","sentence":"The scientist studied the plants.","origin":"Original · Group B (Grades 3–4)"},{"word":"elephant","sentence":"The elephant walked slowly through the grass.","origin":"Original · Group B (Grades 3–4)"},{"word":"beautiful","sentence":"The garden looks beautiful in spring.","origin":"Original · Group B (Grades 3–4)"},{"word":"mountain","sentence":"We could see a mountain in the distance.","origin":"Original · Group B (Grades 3–4)"},{"word":"chocolate","sentence":"She shared a piece of chocolate with her brother.","origin":"Original · Group B (Grades 3–4)"},{"word":"butterfly","sentence":"A butterfly landed on the flower.","origin":"Original · Group B (Grades 3–4)"},{"word":"calendar","sentence":"I wrote the date on my calendar.","origin":"Original · Group B (Grades 3–4)"},{"word":"umbrella","sentence":"Take an umbrella because it might rain.","origin":"Original · Group B (Grades 3–4)"},{"word":"adventure","sentence":"Our camping trip was a wonderful adventure.","origin":"Original · Group B (Grades 3–4)"},{"word":"dinosaur","sentence":"The dinosaur had a very long tail.","origin":"Original · Group B (Grades 3–4)"},{"word":"hospital","sentence":"The doctor works at the hospital.","origin":"Original · Group B (Grades 3–4)"},{"word":"vegetable","sentence":"A carrot is a vegetable.","origin":"Original · Group B (Grades 3–4)"},{"word":"temperature","sentence":"The temperature dropped at night.","origin":"Original · Group B (Grades 3–4)"},{"word":"favorite","sentence":"Blue is my favorite color.","origin":"Original · Group B (Grades 3–4)"},{"word":"neighbor","sentence":"Our neighbor has a friendly dog.","origin":"Original · Group B (Grades 3–4)"},{"word":"surprise","sentence":"The gift was a lovely surprise.","origin":"Original · Group B (Grades 3–4)"},{"word":"tomorrow","sentence":"We will visit our grandparents tomorrow.","origin":"Original · Group B (Grades 3–4)"},{"word":"different","sentence":"The two pictures look different.","origin":"Original · Group B (Grades 3–4)"},{"word":"journey","sentence":"Our journey began early in the morning.","origin":"Original · Group B (Grades 3–4)"},{"word":"careful","sentence":"Please be careful on the wet floor.","origin":"Original · Group B (Grades 3–4)"},{"word":"breakfast","sentence":"I ate eggs and toast for breakfast.","origin":"Original · Group B (Grades 3–4)"},{"word":"wonderful","sentence":"We had a wonderful time at the park.","origin":"Original · Group B (Grades 3–4)"},{"word":"pencil","sentence":"I sharpened my pencil before class.","origin":"Original · Group B (Grades 3–4)"},{"word":"backpack","sentence":"My backpack is full of school supplies.","origin":"Original · Group B (Grades 3–4)"},{"word":"sandwich","sentence":"I packed a sandwich for lunch.","origin":"Original · Group B (Grades 3–4)"},{"word":"birthday","sentence":"We celebrated her birthday with a cake.","origin":"Original · Group B (Grades 3–4)"},{"word":"playground","sentence":"The children played on the playground.","origin":"Original · Group B (Grades 3–4)"},{"word":"football","sentence":"We played football after school.","origin":"Original · Group B (Grades 3–4)"},{"word":"sunshine","sentence":"The sunshine warmed our faces.","origin":"Original · Group B (Grades 3–4)"},{"word":"seashell","sentence":"She found a pretty seashell on the beach.","origin":"Original · Group B (Grades 3–4)"},{"word":"pineapple","sentence":"We cut a fresh pineapple for dessert.","origin":"Original · Group B (Grades 3–4)"},{"word":"cucumber","sentence":"He added cucumber to his salad.","origin":"Original · Group B (Grades 3–4)"},{"word":"strawberry","sentence":"The strawberry tasted sweet.","origin":"Original · Group B (Grades 3–4)"},{"word":"watermelon","sentence":"We shared a watermelon on a hot day.","origin":"Original · Group B (Grades 3–4)"},{"word":"giraffe","sentence":"The giraffe reached the highest leaves.","origin":"Original · Group B (Grades 3–4)"},{"word":"penguin","sentence":"A penguin waddled across the ice.","origin":"Original · Group B (Grades 3–4)"},{"word":"kangaroo","sentence":"The kangaroo jumped across the field.","origin":"Original · Group B (Grades 3–4)"},{"word":"octopus","sentence":"The octopus has eight arms.","origin":"Original · Group B (Grades 3–4)"},{"word":"telescope","sentence":"We used a telescope to look at the moon.","origin":"Original · Group B (Grades 3–4)"},{"word":"photograph","sentence":"My grandfather showed me an old photograph.","origin":"Original · Group B (Grades 3–4)"},{"word":"dictionary","sentence":"I looked up the word in a dictionary.","origin":"Original · Group B (Grades 3–4)"},{"word":"exercise","sentence":"Daily exercise helps us stay healthy.","origin":"Original · Group B (Grades 3–4)"},{"word":"remember","sentence":"Please remember to bring your notebook.","origin":"Original · Group B (Grades 3–4)"},{"word":"whisper","sentence":"The children began to whisper quietly.","origin":"Original · Group B (Grades 3–4)"},{"word":"thunder","sentence":"We heard loud thunder during the storm.","origin":"Original · Group B (Grades 3–4)"},{"word":"lightning","sentence":"A flash of lightning lit up the sky.","origin":"Original · Group B (Grades 3–4)"},{"word":"traffic","sentence":"The traffic was heavy this morning.","origin":"Original · Group B (Grades 3–4)"},{"word":"airport","sentence":"We arrived at the airport early.","origin":"Original · Group B (Grades 3–4)"},{"word":"country","sentence":"Indonesia is a beautiful country.","origin":"Original · Group B (Grades 3–4)"},{"word":"language","sentence":"English is a language we study at school.","origin":"Original · Group B (Grades 3–4)"},{"word":"envelope","sentence":"She put the letter into an envelope.","origin":"Original · Group B (Grades 3–4)"},{"word":"medicine","sentence":"The doctor gave him some medicine.","origin":"Original · Group B (Grades 3–4)"},{"word":"treasure","sentence":"The pirates searched for buried treasure.","origin":"Original · Group B (Grades 3–4)"},{"word":"triangle","sentence":"A triangle has three sides.","origin":"Original · Group B (Grades 3–4)"},{"word":"rectangle","sentence":"We drew a rectangle on the board.","origin":"Original · Group B (Grades 3–4)"},{"word":"question","sentence":"The teacher asked a difficult question.","origin":"Original · Group B (Grades 3–4)"},{"word":"answer","sentence":"Please write your answer on the paper.","origin":"Original · Group B (Grades 3–4)"},{"word":"holiday","sentence":"Our family went to the beach on holiday.","origin":"Original · Group B (Grades 3–4)"}],"originalC":[{"word":"environment","sentence":"We should protect the environment.","origin":"Original · Group C (Grades 5–6)"},{"word":"mysterious","sentence":"A mysterious sound came from the attic.","origin":"Original · Group C (Grades 5–6)"},{"word":"knowledge","sentence":"Reading helps us gain knowledge.","origin":"Original · Group C (Grades 5–6)"},{"word":"extraordinary","sentence":"The athlete showed extraordinary skill.","origin":"Original · Group C (Grades 5–6)"},{"word":"responsibility","sentence":"Taking care of the pet is a big responsibility.","origin":"Original · Group C (Grades 5–6)"},{"word":"necessary","sentence":"It is necessary to wear a helmet.","origin":"Original · Group C (Grades 5–6)"},{"word":"independent","sentence":"She is becoming more independent every year.","origin":"Original · Group C (Grades 5–6)"},{"word":"curiosity","sentence":"His curiosity led him to ask many questions.","origin":"Original · Group C (Grades 5–6)"},{"word":"pronunciation","sentence":"The teacher helped with my pronunciation.","origin":"Original · Group C (Grades 5–6)"},{"word":"achievement","sentence":"Finishing the race was a great achievement.","origin":"Original · Group C (Grades 5–6)"},{"word":"communication","sentence":"Good communication helps teams work together.","origin":"Original · Group C (Grades 5–6)"},{"word":"disappear","sentence":"The rabbit seemed to disappear behind the tree.","origin":"Original · Group C (Grades 5–6)"},{"word":"consequence","sentence":"Every choice can have a consequence.","origin":"Original · Group C (Grades 5–6)"},{"word":"opportunity","sentence":"This is an opportunity to learn something new.","origin":"Original · Group C (Grades 5–6)"},{"word":"imagination","sentence":"Use your imagination to write a story.","origin":"Original · Group C (Grades 5–6)"},{"word":"immediately","sentence":"Please come inside immediately.","origin":"Original · Group C (Grades 5–6)"},{"word":"recommend","sentence":"I recommend this interesting book.","origin":"Original · Group C (Grades 5–6)"},{"word":"determination","sentence":"Her determination helped her finish the project.","origin":"Original · Group C (Grades 5–6)"},{"word":"architecture","sentence":"We admired the architecture of the old building.","origin":"Original · Group C (Grades 5–6)"},{"word":"approximately","sentence":"The trip takes approximately two hours.","origin":"Original · Group C (Grades 5–6)"},{"word":"magnificent","sentence":"The palace had a magnificent entrance.","origin":"Original · Group C (Grades 5–6)"},{"word":"enthusiastic","sentence":"The students were enthusiastic about the contest.","origin":"Original · Group C (Grades 5–6)"},{"word":"occasionally","sentence":"We occasionally visit the museum.","origin":"Original · Group C (Grades 5–6)"},{"word":"experience","sentence":"The science camp was an exciting experience.","origin":"Original · Group C (Grades 5–6)"},{"word":"accommodation","sentence":"We booked our accommodation before the trip.","origin":"Original · Group C (Grades 5–6)"},{"word":"appreciate","sentence":"I appreciate your help with my homework.","origin":"Original · Group C (Grades 5–6)"},{"word":"atmosphere","sentence":"The atmosphere surrounds our planet.","origin":"Original · Group C (Grades 5–6)"},{"word":"bilingual","sentence":"My cousin is bilingual and speaks two languages.","origin":"Original · Group C (Grades 5–6)"},{"word":"celebration","sentence":"The celebration lasted until evening.","origin":"Original · Group C (Grades 5–6)"},{"word":"civilization","sentence":"We learned about an ancient civilization.","origin":"Original · Group C (Grades 5–6)"},{"word":"competition","sentence":"Our school entered a spelling competition.","origin":"Original · Group C (Grades 5–6)"},{"word":"concentrate","sentence":"Please concentrate on the task.","origin":"Original · Group C (Grades 5–6)"},{"word":"confident","sentence":"She felt confident before the presentation.","origin":"Original · Group C (Grades 5–6)"},{"word":"convenient","sentence":"The new bus stop is convenient for students.","origin":"Original · Group C (Grades 5–6)"},{"word":"courageous","sentence":"The courageous firefighter saved a kitten.","origin":"Original · Group C (Grades 5–6)"},{"word":"creativity","sentence":"Art class encourages creativity.","origin":"Original · Group C (Grades 5–6)"},{"word":"delicious","sentence":"The soup smelled delicious.","origin":"Original · Group C (Grades 5–6)"},{"word":"description","sentence":"Write a short description of your favorite animal.","origin":"Original · Group C (Grades 5–6)"},{"word":"development","sentence":"The development of the town took many years.","origin":"Original · Group C (Grades 5–6)"},{"word":"difficult","sentence":"The puzzle was difficult to solve.","origin":"Original · Group C (Grades 5–6)"},{"word":"disappointed","sentence":"He felt disappointed when the match was canceled.","origin":"Original · Group C (Grades 5–6)"},{"word":"education","sentence":"Every child deserves a good education.","origin":"Original · Group C (Grades 5–6)"},{"word":"efficient","sentence":"The new machine is more efficient.","origin":"Original · Group C (Grades 5–6)"},{"word":"electricity","sentence":"The lights need electricity to work.","origin":"Original · Group C (Grades 5–6)"},{"word":"embarrassed","sentence":"I felt embarrassed after forgetting my lines.","origin":"Original · Group C (Grades 5–6)"},{"word":"encourage","sentence":"Teachers encourage students to ask questions.","origin":"Original · Group C (Grades 5–6)"},{"word":"especially","sentence":"I enjoy fruit, especially mangoes.","origin":"Original · Group C (Grades 5–6)"},{"word":"exaggerate","sentence":"Please do not exaggerate what happened.","origin":"Original · Group C (Grades 5–6)"},{"word":"fascinating","sentence":"The documentary was fascinating.","origin":"Original · Group C (Grades 5–6)"},{"word":"fortunately","sentence":"Fortunately, we arrived before the rain began.","origin":"Original · Group C (Grades 5–6)"},{"word":"government","sentence":"The government announced a new public park.","origin":"Original · Group C (Grades 5–6)"},{"word":"guarantee","sentence":"A good plan does not guarantee success.","origin":"Original · Group C (Grades 5–6)"},{"word":"identify","sentence":"Can you identify the bird in this picture?","origin":"Original · Group C (Grades 5–6)"},{"word":"intelligent","sentence":"The intelligent dolphin learned the trick quickly.","origin":"Original · Group C (Grades 5–6)"},{"word":"international","sentence":"Students joined the international event.","origin":"Original · Group C (Grades 5–6)"},{"word":"laboratory","sentence":"We conducted the experiment in the laboratory.","origin":"Original · Group C (Grades 5–6)"},{"word":"maintenance","sentence":"The swimming pool closed for maintenance.","origin":"Original · Group C (Grades 5–6)"},{"word":"nutrition","sentence":"Good nutrition supports healthy growth.","origin":"Original · Group C (Grades 5–6)"},{"word":"persuade","sentence":"She tried to persuade her friend to join the club.","origin":"Original · Group C (Grades 5–6)"},{"word":"rhythm","sentence":"The drummer kept a steady rhythm.","origin":"Original · Group C (Grades 5–6)"}]};
+// All original and uploaded word banks are embedded here; no external scripts or libraries.
+const $ = id => document.getElementById(id);
+const BASE_ORDER = ['new120', 'thesaurusIntro', 'thesaurusA', 'thesaurusB', 'thesaurusC', 'originalB', 'originalC'];
+const SOURCE_ORDER = BASE_ORDER.slice(0, 5);
+const combined = keys => keys.flatMap(k => RAW_BANKS[k]);
+const uniqueWords = arr => {
+  const seen = new Set();
+  return arr.filter(entry => {
+    const key = entry.word.toLocaleLowerCase('en');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 };
-const $=id=>document.getElementById(id);let group='B',order=[],idx=0,correct=0,attempted=0,checked=false,correcting=false,sequence=0,finished=false;
-function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
-function current(){return banks[group][order[idx]]}
-function stop(){sequence++;if('speechSynthesis' in window)speechSynthesis.cancel()}
-function render(){finished=false;checked=false;correcting=false;$('finish').hidden=true;$('finish').textContent='';$('hear').disabled=false;$('repeat').disabled=false;$('next').disabled=false;$('question').textContent='Question '+(idx+1)+' of '+order.length;$('score').textContent=`Score: ${correct} / ${attempted}`;$('spoken').textContent='Ready to listen';$('hint').textContent='Press “Hear the judge” to hear the word, sentence, and word again.';$('answer').value='';$('answer').disabled=false;$('check').disabled=false;$('check').textContent='Check spelling';$('status').textContent='';$('status').className='status'}
-function reset(){stop();group=$('group').value;const simulation=$('mode').value==='simulation';order=shuffle([...banks[group].keys()]);if(simulation)order=order.slice(0,25);idx=0;correct=0;attempted=0;$('bankinfo').textContent=banks[group].length+' words for Group '+group+' · 10 English 1 examples + '+(banks[group].length-10)+' from the 2026 grade-based list.';$('mode-note').textContent=simulation?'Competition simulation: 25 random words, no repeats within the round. Final results appear after question 25.':'Unlimited practice: all '+banks[group].length+' source-based words in random order; reshuffles after the bank ends.';render()}
-function rankedVoices(){
- const vs=window.speechSynthesis?.getVoices()||[];
- return vs.filter(v=>/^en[-_]/i.test(v.lang)).sort((a,b)=>{
-  const rank=v=> (/(natural|neural|enhanced|premium|online)/i.test(v.name)?100:0)+
-    (/^en[-_]US$/i.test(v.lang)?30:0)+
-    (/(male|david|guy|mark|matthew|andrew|eric|ryan|jason|brian)/i.test(v.name)?10:0);
-  return rank(b)-rank(a);
- });
+const BANKS = {
+  ...RAW_BANKS,
+  allUploaded: combined(SOURCE_ORDER),
+  allUnique: uniqueWords(combined(BASE_ORDER))
+};
+const BANK_LABELS = [
+  ['new120', 'New word list'],
+  ['thesaurusIntro', 'Thesaurus · Section 1'],
+  ['thesaurusA', 'Thesaurus · Group A'],
+  ['thesaurusB', 'Thesaurus · Group B'],
+  ['thesaurusC', 'Thesaurus · Group C'],
+  ['allUploaded', 'All uploaded new words'],
+  ['originalB', 'Original · Group B (Grades 3–4)'],
+  ['originalC', 'Original · Group C (Grades 5–6)'],
+  ['allUnique', 'All lists · no duplicate words']
+];
+for (const [id, label] of BANK_LABELS) {
+  $('bank').add(new Option(`${label} · ${BANKS[id].length} words`, id));
 }
-function getVoice(){
- const vs=rankedVoices();
- const exact=$('specificvoice').value;
- if(exact!=='auto')return vs.find(v=>v.voiceURI===exact)||null;
- const pref=$('voice').value;
- const male=/(male|david|mark|guy|jason|matthew|andrew|brian|aaron|fred|daniel|alex|eric|ryan|christopher|roger)/i;
- const female=/(female|zira|samantha|jenny|aria|ava|allison|victoria|susan|karen|joanna|kendra)/i;
- const american=vs.filter(v=>/^en[-_]US$/i.test(v.lang));
- const pool=american.length?american:vs;
- if(pref==='male')return pool.find(v=>male.test(v.name)&&!female.test(v.name))||pool[0]||null;
- if(pref==='female')return pool.find(v=>female.test(v.name))||pool[0]||null;
- return pool[0]||null;
-}
-function updateVoiceStatus(){
- if(!('speechSynthesis' in window)){$('voice-status').textContent='Voice unavailable in this browser';return}
- const sel=$('specificvoice'),saved=sel.value;
- sel.replaceChildren(new Option('Automatically choose best available','auto'));
- rankedVoices().forEach(v=>sel.add(new Option(v.name+' ('+v.lang+')',v.voiceURI)));
- sel.value=[...sel.options].some(o=>o.value===saved)?saved:'auto';
- const v=getVoice();$('voice-status').textContent=v?v.name+' ('+v.lang+')':'Default browser voice';
-}
-function speak(text, token){
- return new Promise(resolve=>{
-  if(!('speechSynthesis' in window)||token!==sequence){resolve();return}
-  let finished=false;
-  const finish=()=>{if(!finished){finished=true;resolve()}};
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-US'; const v=getVoice(); if(v)u.voice=v;
-  u.rate=Number($('speed').value);u.pitch=1;u.volume=1;
-  u.onend=finish;u.onerror=finish;
-  speechSynthesis.speak(u);
- });
-}
-function pause(ms,token){return new Promise(resolve=>{
-  const start=Date.now();
-  const interval=setInterval(()=>{if(token!==sequence||Date.now()-start>=ms){clearInterval(interval);resolve()}},50);
- })}
-async function judge(){
- if(finished)return;stop();const token=sequence;const [word,sentence]=current();
- if(!checked) $('answer').focus({preventScroll:true});
- $('spoken').textContent='Preparing the judge…';$('hint').textContent='';
- if(!('speechSynthesis' in window)){$('spoken').textContent='Speech is unavailable';$('hint').textContent='Try Chrome, Edge, or Safari with sound turned on.';return}
- // Saying a short introduction before each isolated word avoids the first syllable being clipped by some audio systems.
- const parts=['Your word is: '+word+'.',sentence,'The word again: '+word+'.'];
- for(let i=0;i<parts.length;i++){
-  if(token!==sequence)return;
-  $('spoken').textContent=i===1?'Example sentence…':i===2?'Repeating the word…':'Listen to the word…';
-  await pause(300,token);if(token!==sequence)return;
-  await speak(parts[i],token);if(token!==sequence)return;
-  if(i<2){$('spoken').textContent='(pause)';await pause(Number($('pauseLength').value),token)}
- }
- if(token===sequence)$('spoken').textContent='Your turn to spell!';
-}
-$('hear').onclick=judge;$('repeat').onclick=judge;
-$('form').onsubmit=e=>{
- e.preventDefault();if(finished)return;
- if(checked&&!correcting)return;
- stop();
- const guess=$('answer').value.trim().toLowerCase();if(!guess)return;
- const word=current()[0];
- if(correcting){
-  if(guess===word){
-   correcting=false;$('status').className='status good';
-   $('status').textContent='✅ Spelled correctly on your correction! Ready for the next word.';
-   $('answer').disabled=true;$('check').disabled=true;
-  }else{
-   $('status').className='status bad';
-   $('status').textContent='❌ Try copying the correct spelling shown above.';
-   $('answer').focus();$('answer').select();
+$('bank').value = 'new120';
+
+const state = {
+  pool: [], order: [], index: 0, correct: 0, attempted: 0,
+  checked: false, correcting: false, finished: false,
+  misses: [], isRetry: false
+};
+let visibleStudyCount = 60;
+let generation = 0;
+let activeCancel = null;
+let activeButton = null;
+let dictionaryAbort = null;
+let lastAudioError = '';
+let unlocked = false;
+const resolvedWords = new Map();
+const dictionaryCache = new Map();
+const failed = { oxford: 0, dictionary: 0, google: 0, streamelements: 0 };
+const player = new Audio();
+player.preload = 'auto';
+const SILENT_WAV = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+const SOURCE_LABEL = {
+  oxford: 'Oxford UK recording', dictionary: 'Free Dictionary UK recording',
+  google: 'Google UK speech', streamelements: 'StreamElements UK voice',
+  browser: 'device voice'
+};
+const isAlive = gen => gen === generation;
+const normal = word => String(word).trim().toLocaleLowerCase('en');
+const isUk = () => $('accent').value === 'en-GB';
+const rate = () => Number($('speed').value);
+const pauseMs = () => Number($('pause').value);
+const randomized = arr => {
+  const result = arr.slice();
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
   }
-  return;
- }
- checked=true;attempted++;const ok=guess===word;if(ok)correct++;
- $('score').textContent=`Score: ${correct} / ${attempted}`;
- $('status').className='status '+(ok?'good':'bad');
- if(ok){
-  $('status').textContent='✅ Correct!';$('answer').disabled=true;$('check').disabled=true;
-  $('spoken').textContent='Answer submitted';
- }else{
-  correcting=true;
-  $('spoken').textContent='Correct spelling: '+word;
-  $('hint').textContent='Look at the correct spelling above, then type it again to practice.';
-  $('status').textContent='❌ Not quite. Correct the word and submit again. Your first attempt is recorded.';
-  $('answer').value='';$('answer').disabled=false;
-  $('check').textContent='Check correction';$('answer').focus();
- }
+  return result;
 };
-$('voice').onchange=()=>{stop();updateVoiceStatus()};$('specificvoice').onchange=()=>{stop();const v=getVoice();$('voice-status').textContent=v?v.name+' ('+v.lang+')':'Default browser voice'};if('speechSynthesis' in window){speechSynthesis.addEventListener?.('voiceschanged',updateVoiceStatus)}updateVoiceStatus();
-function completeSimulation(){
- stop();finished=true;$('spoken').textContent='Competition complete!';$('hint').textContent='Start over to try a fresh set of 25 words.';
- $('answer').disabled=true;$('check').disabled=true;$('hear').disabled=true;$('repeat').disabled=true;$('next').disabled=true;
- $('finish').hidden=false;$('finish').innerHTML='<strong>🏆 Simulation complete!</strong><div>Final score: <strong>'+correct+' / 25</strong> ('+Math.round(correct/25*100)+'%)</div><div>Your score counts the first answer for each word. Use Start over for another shuffled competition round.</div>';
- $('question').textContent='Finished · 25 of 25';
+
+function stopAll() {
+  generation++;
+  const cancel = activeCancel;
+  activeCancel = null;
+  if (cancel) { try { cancel(); } catch (_) {} }
+  if (dictionaryAbort) { try { dictionaryAbort.abort(); } catch (_) {} dictionaryAbort = null; }
+  try { player.pause(); } catch (_) {}
+  try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (_) {}
+  if (activeButton) activeButton.removeAttribute('aria-busy');
+  activeButton = null;
 }
-$('next').onclick=()=>{if(finished)return;stop();idx++;if(idx>=order.length){if($('mode').value==='simulation'){completeSimulation();return}order=shuffle([...banks[group].keys()]);idx=0}render()};$('reset').onclick=reset;$('group').onchange=reset;$('mode').onchange=reset;reset();
-</script></body></html>
+function unlockAudio() {
+  try {
+    player.src = SILENT_WAV;
+    const task = player.play();
+    if (task && task.catch) task.catch(() => {});
+  } catch (_) {}
+  if (!unlocked && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
+    unlocked = true;
+    try {
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      speechSynthesis.speak(u);
+    } catch (_) {}
+  }
+}
+function delay(ms, gen) {
+  return new Promise(resolve => setTimeout(() => resolve(isAlive(gen)), ms));
+}
+function setAudioStatus(text, context) {
+  $(context === 'study' ? 'libraryStatus' : 'audioStatus').textContent = text;
+}
+function sourceName(source) { return SOURCE_LABEL[source] || source; }
+function oxfordUrls(word) {
+  const w = word.toLowerCase();
+  const dir = w[0] + '/' + w.slice(0,3).padEnd(3,'_') + '/' + w.slice(0,5).padEnd(5,'_') + '/';
+  const root = 'https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/' + dir;
+  return [
+    `${root}${w}__gb_1.mp3`, `${root}${w}_1__gb_1.mp3`, `${root}${w}_2__gb_1.mp3`
+  ];
+}
+function googleUrl(text) {
+  return 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-GB&total=1&idx=0&textlen='
+    + text.length + '&q=' + encodeURIComponent(text);
+}
+function streamUrl(text) {
+  return 'https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=' + encodeURIComponent(text);
+}
+
+// Audio player is shared by every pronunciation, preventing overlapping recordings.
+function playClip(url, gen, onStart, startTimeoutMs = 3800) {
+  return new Promise(resolve => {
+    if (!isAlive(gen)) { resolve(false); return; }
+    let done = false, startTimer, maxTimer;
+    function finish(ok, reason) {
+      if (done) return;
+      done = true;
+      clearTimeout(startTimer); clearTimeout(maxTimer);
+      player.removeEventListener('playing', onPlaying);
+      player.removeEventListener('ended', onEnded);
+      player.removeEventListener('error', onError);
+      if (activeCancel === cancel) activeCancel = null;
+      if (!ok) {
+        lastAudioError = reason || 'playback failed';
+        try { player.pause(); } catch (_) {}
+      }
+      resolve(ok);
+    }
+    const cancel = () => finish(false, 'stopped');
+    function onPlaying() {
+      clearTimeout(startTimer);
+      if (isAlive(gen) && onStart) onStart();
+      maxTimer = setTimeout(() => finish(false, 'audio exceeded 60 seconds'), 60000);
+    }
+    function onEnded() { finish(true); }
+    function onError() {
+      const code = player.error && player.error.code;
+      finish(false, ({1:'aborted', 2:'network problem', 3:'invalid audio',4:'unavailable or blocked'})[code] || 'could not load');
+    }
+    activeCancel = cancel;
+    player.addEventListener('playing', onPlaying);
+    player.addEventListener('ended', onEnded);
+    player.addEventListener('error', onError);
+    startTimer = setTimeout(() => finish(false, 'audio start timed out'), startTimeoutMs);
+    try {
+      player.pause();
+      player.src = url;
+      // Keep real recordings and online MP3 audio at native pitch and speed.
+      // Slowing short words such as "platform" or "double" can sound distorted.
+      player.playbackRate = 1;
+      const task = player.play();
+      if (task && task.catch) task.catch(err => finish(false, err && err.name === 'NotAllowedError' ? 'browser blocked autoplay' : 'could not play audio'));
+    } catch (err) { finish(false, 'could not start audio'); }
+  });
+}
+
+function EnglishVoices() {
+  if (!('speechSynthesis' in window)) return [];
+  try { return speechSynthesis.getVoices().filter(v => /^en[-_]/i.test(v.lang)); }
+  catch (_) { return []; }
+}
+function voiceScore(v) {
+  const preferred = $('accent').value.toLowerCase();
+  const lang = String(v.lang).replace('_', '-').toLowerCase();
+  const name = String(v.name);
+  let score = lang === preferred ? 150 : (lang.startsWith(preferred) ? 130 : 0);
+  if (/natural|neural|enhanced|premium|online/i.test(name)) score += 25;
+  const male = /\b(male|brian|david|guy|mark|matthew|andrew|eric|ryan|jason|daniel|alex|fred|roger)\b/i.test(name);
+  const female = /\b(female|zira|samantha|jenny|aria|ava|allison|victoria|susan|karen|joanna|kendra|serena)\b/i.test(name);
+  if ($('voiceStyle').value === 'male' && male && !female) score += 40;
+  if ($('voiceStyle').value === 'female' && female) score += 40;
+  return score;
+}
+function pickVoice() {
+  const voices = EnglishVoices();
+  const chosen = $('specificVoice').value;
+  if (chosen !== 'auto') return voices.find(v => v.voiceURI === chosen) || null;
+  return voices.sort((a,b) => voiceScore(b) - voiceScore(a))[0] || null;
+}
+function updateVoiceList() {
+  const sel = $('specificVoice'), saved = sel.value;
+  sel.replaceChildren(new Option('Automatically choose best available', 'auto'));
+  for (const v of EnglishVoices().sort((a,b) => voiceScore(b) - voiceScore(a))) {
+    sel.add(new Option(`${v.name} (${v.lang})`, v.voiceURI));
+  }
+  sel.value = Array.from(sel.options).some(option => option.value === saved) ? saved : 'auto';
+  const selected = pickVoice();
+  $('voiceInfo').textContent = selected
+    ? `Current device voice: ${selected.name} (${selected.lang}). Voice availability depends on your device.`
+    : ('speechSynthesis' in window ? 'No English voice was listed. Your browser may still use its default speech voice.' : 'This browser does not support speech synthesis.');
+}
+
+function speakBrowser(text, gen, onStart) {
+  return new Promise(resolve => {
+    if (!isAlive(gen)) { resolve(false); return; }
+    if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+      lastAudioError = 'no device speech engine'; resolve(false); return;
+    }
+    // Exactly match the uploaded Word Library: word → sentence → word.
+    // Do NOT narrate "Your word is" or "The word again" in device fallback.
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = $('accent').value;
+    u.rate = rate(); u.pitch = 1; u.volume = 1;
+    const voice = pickVoice();
+    if (voice) u.voice = voice;
+    let done = false, startTimer, maxTimer;
+    const finish = (ok, why) => {
+      if (done) return;
+      done = true;
+      clearTimeout(startTimer); clearTimeout(maxTimer);
+      if (activeCancel === cancel) activeCancel = null;
+      if (!ok) lastAudioError = why || 'device speech error';
+      resolve(ok);
+    };
+    const cancel = () => { try { speechSynthesis.cancel(); } catch (_) {} finish(false, 'stopped'); };
+    u.onstart = () => { clearTimeout(startTimer); if (isAlive(gen) && onStart) onStart(); };
+    u.onend = () => finish(true);
+    u.onerror = () => finish(false, 'device speech failed');
+    activeCancel = cancel;
+    startTimer = setTimeout(() => { lastAudioError = 'speech start timed out'; cancel(); }, 6500);
+    maxTimer = setTimeout(() => cancel(), Math.max(12000, text.length * 220 + 9000));
+    try { speechSynthesis.speak(u); } catch (_) { finish(false, 'speech could not start'); }
+  });
+}
+
+async function dictionaryUkUrl(word, gen) {
+  const w = word.toLowerCase();
+  if (dictionaryCache.has(w)) return dictionaryCache.get(w);
+  const controller = new AbortController();
+  dictionaryAbort = controller;
+  const timeout = setTimeout(() => controller.abort(), 3300);
+  try {
+    const response = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(w), { signal: controller.signal });
+    if (!isAlive(gen)) return null;
+    if (!response.ok) { dictionaryCache.set(w, null); return null; }
+    const entries = await response.json();
+    if (!isAlive(gen)) return null;
+    const urls = entries.flatMap(entry => (entry.phonetics || []).map(p => p.audio || '')).filter(Boolean);
+    const url = urls.find(link => /-uk\.(mp3|ogg)(\?|$)/i.test(link)) || null;
+    dictionaryCache.set(w, url);
+    failed.dictionary = 0;
+    return url;
+  } catch (_) {
+    if (isAlive(gen)) failed.dictionary++;
+    return null;
+  } finally {
+    clearTimeout(timeout);
+    if (dictionaryAbort === controller) dictionaryAbort = null;
+  }
+}
+function candidateList(text, isWord) {
+  if (!isUk() || $('audioPref').value === 'device') return [{ source: 'browser' }];
+  const recorded = isWord ? [
+    ...oxfordUrls(text).map(url => ({ source: 'oxford', url })),
+    { source: 'dictionary', lazy: true }
+  ] : [];
+  const network = [
+    { source: 'google', url: googleUrl(text) },
+    { source: 'streamelements', url: streamUrl(text) }
+  ];
+  const ordered = $('audioPref').value === 'online' ? [...network, ...recorded] : [...recorded, ...network];
+  const survivors = ordered.filter(candidate => failed[candidate.source] < 3);
+  let result = [...survivors, { source: 'browser' }];
+  if (isWord && resolvedWords.has(text.toLowerCase())) {
+    const source = resolvedWords.get(text.toLowerCase());
+    if (source && result.some(c => c.source === source.source && c.url === source.url)) {
+      result = [source, ...result.filter(c => !(c.source === source.source && c.url === source.url))];
+    }
+  }
+  return result;
+}
+async function playOne(text, isWord, gen, context, label) {
+  const candidates = candidateList(text, isWord);
+  let lastTried = '';
+  for (const candidate of candidates) {
+    if (!isAlive(gen)) return null;
+    const source = candidate.source;
+    if (source === 'oxford' && failed.oxford >= 3) continue;
+    lastTried = source;
+    setAudioStatus(`${label} · trying ${sourceName(source)}…`, context);
+    let url = candidate.url;
+    if (candidate.lazy) {
+      url = await dictionaryUkUrl(text, gen);
+      if (!isAlive(gen)) return null;
+      if (!url) continue;
+    }
+    const onStart = () => setAudioStatus(`${label} · ${sourceName(source)}`, context);
+    lastAudioError = '';
+    const success = source === 'browser'
+      ? await speakBrowser(text, gen, onStart)
+      : await playClip(url, gen, onStart, source === 'oxford' ? 2800 : 4500);
+    if (!isAlive(gen)) return null;
+    if (source in failed) failed[source] = success ? 0 : failed[source] + 1;
+    if (success) {
+      const result = { source, url };
+      if (isWord) resolvedWords.set(text.toLowerCase(), result);
+      return result;
+    }
+    // If one Oxford URL timed out or was blocked, avoid two more long waits.
+    if (source === 'oxford' && /timed out|blocked autoplay/.test(lastAudioError)) {
+      failed.oxford = Math.max(failed.oxford, 3);
+    }
+  }
+  if (isAlive(gen)) setAudioStatus(`${label} · audio unavailable (last tried: ${sourceName(lastTried)})`, context);
+  return false;
+}
+async function playSequence(item, context, button) {
+  stopAll();
+  unlockAudio();
+  const gen = generation;
+  activeButton = button;
+  if (button) button.setAttribute('aria-busy', 'true');
+  const names = [];
+  const steps = [
+    { text: item.word, isWord: true, label: '1/3 · word' },
+    { text: item.sentence, isWord: false, label: '2/3 · sentence' },
+    { text: item.word, isWord: true, label: '3/3 · word' }
+  ];
+  if (context === 'test') {
+    $('spoken').textContent = 'Listen to the word…';
+    $('hint').textContent = 'Exactly three spoken parts: word → sentence → word. No extra judge introduction.';
+  }
+  for (let i = 0; i < steps.length; i++) {
+    if (!isAlive(gen)) return;
+    if (i > 0 && !(await delay(pauseMs(), gen))) return;
+    if (context === 'test') $('spoken').textContent = i === 1 ? 'Listen to the sentence…' : (i === 2 ? 'The word again…' : 'Listen to the word…');
+    const step = steps[i];
+    const result = await playOne(step.text, step.isWord, gen, context, step.label);
+    if (!isAlive(gen)) return;
+    names.push(result ? sourceName(result.source) : 'unavailable');
+  }
+  const okay = names.every(name => name !== 'unavailable');
+  setAudioStatus((okay ? '✓ Finished' : '⚠ Some audio was unavailable') + ' · ' + names.join(' → '), context);
+  if (context === 'test') {
+    if (state.checked && state.order[state.index]) {
+      $('spoken').textContent = `Correct spelling: ${state.order[state.index].word}`;
+    } else {
+      $('spoken').textContent = 'Your turn to spell!';
+      $('hint').textContent = 'Type the word you heard. You can replay it at any time.';
+      $('answer').focus({preventScroll: true});
+    }
+  }
+  if (activeButton === button) { button && button.removeAttribute('aria-busy'); activeButton = null; }
+}
+
+function updateNotes() {
+  const count = state.pool.length;
+  const selectedLabel = BANK_LABELS.find(([id]) => id === $('bank').value)?.[1] || 'Selected list';
+  const n = Math.min(25, count);
+  $('listNote').textContent = state.isRetry
+    ? `Reviewing ${count} missed ${count === 1 ? 'word' : 'words'} from your last round. First attempts count toward this review score.`
+    : $('mode').value === 'simulation'
+      ? `${selectedLabel}: ${count} words available. Competition round: ${n} randomly chosen ${n === 1 ? 'word' : 'words'}, without repeats.`
+      : `${selectedLabel}: ${count} words available. Unlimited mode reshuffles when you finish a full pass.`;
+}
+function current() { return state.order[state.index]; }
+function updateScoreAndProgress() {
+  const length = state.order.length || 1;
+  const done = state.finished ? length : state.index + (state.checked ? 1 : 0);
+  $('score').textContent = `Score: ${state.correct} / ${state.attempted}`;
+  $('question').textContent = state.finished
+    ? `Round complete · ${length} of ${length}`
+    : `Question ${state.index + 1} of ${length}`;
+  const percent = Math.min(100, done / length * 100);
+  $('progressFill').style.width = percent + '%';
+  $('progressBar').setAttribute('aria-valuenow', String(Math.round(percent)));
+}
+function renderQuestion() {
+  state.checked = false;
+  state.correcting = false;
+  state.finished = false;
+  $('results').hidden = true;
+  $('spoken').textContent = 'Ready to listen?';
+  $('hint').textContent = 'Press “Hear the judge” to hear word → sentence → word. The spelling stays hidden.';
+  $('audioStatus').textContent = '';
+  $('answer').value = '';
+  $('answer').disabled = false;
+  $('check').disabled = false;
+  $('check').textContent = 'Check spelling';
+  $('hear').disabled = false;
+  $('repeat').disabled = false;
+  $('skip').disabled = false;
+  $('next').disabled = true;
+  $('next').textContent = 'Next word →';
+  $('feedback').className = 'feedback';
+  $('feedback').textContent = '';
+  updateScoreAndProgress();
+}
+function newRound(retryPool = null) {
+  stopAll();
+  state.pool = retryPool || BANKS[$('bank').value];
+  state.isRetry = !!retryPool;
+  let list = randomized(state.pool);
+  if ($('mode').value === 'simulation' && !retryPool) list = list.slice(0,25);
+  state.order = list;
+  state.index = 0;
+  state.correct = 0;
+  state.attempted = 0;
+  state.misses = [];
+  updateNotes();
+  renderQuestion();
+  if (!$('study-view').hidden) renderLibrary();
+}
+function setFeedback(message, status) {
+  $('feedback').className = 'feedback ' + status;
+  $('feedback').textContent = message;
+}
+function recordFirstTry(correct, guess, skipped) {
+  state.checked = true;
+  state.attempted++;
+  if (correct) state.correct++;
+  else state.misses.push({ item: current(), guess, skipped: !!skipped });
+  $('next').disabled = false;
+  const last = state.index === state.order.length - 1;
+  $('next').textContent = last && $('mode').value === 'simulation' && !state.isRetry ? 'See results →' : 'Next word →';
+  $('skip').disabled = true;
+  updateScoreAndProgress();
+}
+function showAnswer() {
+  $('spoken').textContent = `Correct spelling: ${current().word}`;
+  $('hint').textContent = 'Look at the answer above, then type it again to practise your correction.';
+}
+$('answerForm').addEventListener('submit', event => {
+  event.preventDefault();
+  if (state.finished || (state.checked && !state.correcting)) return;
+  const guess = normal($('answer').value);
+  if (!guess) return;
+  stopAll();
+  const word = normal(current().word);
+  if (state.correcting) {
+    if (guess === word) {
+      state.correcting = false;
+      setFeedback('✅ Correction spelled correctly! Your first-attempt score stays the same.', 'good');
+      $('answer').disabled = true;
+      $('check').disabled = true;
+      $('hint').textContent = 'Great correction. Continue with the next word.';
+    } else {
+      setFeedback('❌ Try copying the correct spelling shown above.', 'bad');
+      $('answer').focus(); $('answer').select();
+    }
+    return;
+  }
+  const correct = guess === word;
+  recordFirstTry(correct, guess, false);
+  if (correct) {
+    $('spoken').textContent = 'Answer submitted';
+    $('hint').textContent = `Correct word: ${current().word}`;
+    setFeedback('✅ Correct spelling on your first try!', 'good');
+    $('answer').disabled = true;
+    $('check').disabled = true;
+  } else {
+    state.correcting = true;
+    showAnswer();
+    setFeedback('❌ Not quite. Your first try is recorded. Type the correct spelling once to practise.', 'bad');
+    $('answer').value = '';
+    $('check').textContent = 'Check correction';
+    $('answer').focus();
+  }
+});
+$('skip').addEventListener('click', () => {
+  if (state.finished || state.checked) return;
+  stopAll();
+  recordFirstTry(false, '', true);
+  state.correcting = false;
+  $('answer').disabled = true;
+  $('check').disabled = true;
+  $('spoken').textContent = `Correct spelling: ${current().word}`;
+  $('hint').textContent = 'Skipping counts as incorrect. You can replay the word or continue.';
+  setFeedback('Skipped — this word counts as incorrect.', 'bad');
+});
+function showResults() {
+  stopAll();
+  state.finished = true;
+  $('spoken').textContent = 'Competition complete!';
+  $('hint').textContent = 'Your results are below. Start a fresh round or retry the missed words.';
+  $('audioStatus').textContent = '';
+  for (const id of ['answer','check','hear','repeat','skip','next']) $(id).disabled = true;
+  const total = state.order.length;
+  const percent = total ? Math.round(state.correct / total * 100) : 0;
+  $('resultSummary').textContent = `First-try score: ${state.correct} / ${total} (${percent}%).`;
+  $('resultExplanation').textContent = state.misses.length
+    ? `Review ${state.misses.length} missed ${state.misses.length === 1 ? 'word' : 'words'} below, or choose “Practice missed words”.`
+    : 'Excellent! You spelled every word correctly on the first try.';
+  const ul = $('missedWords'); ul.replaceChildren();
+  for (const miss of state.misses) {
+    const li = document.createElement('li');
+    li.textContent = miss.item.word + ' — ' + (miss.skipped ? 'skipped' : `you typed “${miss.guess}”`);
+    ul.appendChild(li);
+  }
+  ul.hidden = !state.misses.length;
+  $('retryMissed').hidden = !state.misses.length;
+  $('results').hidden = false;
+  updateScoreAndProgress();
+}
+$('next').addEventListener('click', () => {
+  if (state.finished || !state.checked) return;
+  stopAll();
+  if (state.index + 1 < state.order.length) {
+    state.index++;
+    renderQuestion();
+  } else if ($('mode').value === 'simulation' && !state.isRetry) {
+    showResults();
+  } else {
+    state.order = randomized(state.pool);
+    state.index = 0;
+    state.isRetry = !!state.isRetry;
+    renderQuestion();
+  }
+});
+$('retryMissed').addEventListener('click', () => {
+  if (!state.misses.length) return;
+  const misses = state.misses.map(m => m.item);
+  $('mode').value = 'practice';
+  newRound(misses);
+});
+$('newRound').addEventListener('click', () => newRound());
+$('restart').addEventListener('click', () => newRound());
+$('bank').addEventListener('change', () => { $('search').value = ''; visibleStudyCount = 60; newRound(); renderLibrary(); });
+$('mode').addEventListener('change', () => newRound());
+$('hear').addEventListener('click', () => playSequence(current(), 'test', $('hear')));
+$('repeat').addEventListener('click', () => playSequence(current(), 'test', $('repeat')));
+$('stop').addEventListener('click', () => {
+  stopAll();
+  $('audioStatus').textContent = 'Audio stopped.';
+  if (!state.checked) {
+    $('spoken').textContent = 'Ready when you are';
+    $('hint').textContent = 'Replay the judge or type the word you heard.';
+  }
+});
+$('accent').addEventListener('change', () => { stopAll(); resolvedWords.clear(); updateVoiceList(); $('audioStatus').textContent = ''; });
+$('voiceStyle').addEventListener('change', () => { stopAll(); updateVoiceList(); });
+$('specificVoice').addEventListener('change', () => { stopAll(); updateVoiceList(); });
+$('audioPref').addEventListener('change', () => { stopAll(); resolvedWords.clear(); $('audioStatus').textContent = ''; });
+$('speed').addEventListener('change', stopAll);
+$('pause').addEventListener('change', stopAll);
+
+function setTab(which) {
+  const study = which === 'study';
+  stopAll();
+  $('tab-test').classList.toggle('active', !study);
+  $('tab-study').classList.toggle('active', study);
+  $('tab-test').setAttribute('aria-selected', String(!study));
+  $('tab-study').setAttribute('aria-selected', String(study));
+  $('test-view').hidden = study;
+  $('study-view').hidden = !study;
+  if (study) renderLibrary();
+}
+$('tab-test').addEventListener('click', () => setTab('test'));
+$('tab-study').addEventListener('click', () => setTab('study'));
+function renderLibrary() {
+  const query = normal($('search').value);
+  const words = BANKS[$('bank').value].filter(entry =>
+    !query || normal(entry.word).includes(query) || normal(entry.sentence).includes(query));
+  const slice = words.slice(0, visibleStudyCount);
+  const grid = $('libraryGrid');
+  grid.replaceChildren();
+  for (const item of slice) {
+    const card = document.createElement('article'); card.className = 'word-card';
+    const top = document.createElement('div'); top.className = 'word-top';
+    const name = document.createElement('strong'); name.textContent = item.word;
+    const play = document.createElement('button'); play.type = 'button'; play.textContent = '🔊 Listen';
+    play.setAttribute('aria-label', `Hear ${item.word} in a sentence`);
+    play.addEventListener('click', () => {
+      if (activeButton === play) { stopAll(); $('libraryStatus').textContent = 'Audio stopped.'; }
+      else playSequence(item, 'study', play);
+    });
+    top.append(name, play);
+    const sentence = document.createElement('div'); sentence.className = 'word-sentence'; sentence.textContent = item.sentence;
+    const origin = document.createElement('div'); origin.className = 'word-origin'; origin.textContent = item.origin;
+    card.append(top, sentence, origin);
+    grid.appendChild(card);
+  }
+  $('libraryCount').textContent = `Showing ${slice.length} of ${words.length} matching words`;
+  $('showMore').hidden = slice.length === words.length;
+  $('libraryStatus').textContent = words.length ? '' : 'No matches in this word list. Try another search.';
+}
+$('search').addEventListener('input', () => { visibleStudyCount = 60; stopAll(); renderLibrary(); });
+$('showMore').addEventListener('click', () => { visibleStudyCount += 60; renderLibrary(); });
+
+async function audioTest(provider) {
+  stopAll(); unlockAudio();
+  const gen = generation;
+  const sample = 'Testing one, two, three. The quick brown fox jumps over the lazy dog.';
+  $('diagnostic').textContent = `Testing ${sourceName(provider)}…`;
+  let ok;
+  if (provider === 'browser') {
+    ok = await speakBrowser(sample, gen, () => {});
+  } else if (provider === 'oxford') {
+    ok = await playClip(oxfordUrls('dictionary')[0], gen, () => {}, 4500);
+  } else if (provider === 'google') {
+    ok = await playClip(googleUrl(sample), gen, () => {}, 5000);
+  } else {
+    ok = await playClip(streamUrl(sample), gen, () => {}, 5000);
+  }
+  if (!isAlive(gen)) return;
+  if (ok && provider in failed) failed[provider] = 0;
+  $('diagnostic').textContent = ok ? `✓ ${sourceName(provider)} is working.`
+    : `✗ ${sourceName(provider)} unavailable (${lastAudioError || 'unknown error'}). Try your device voice.`;
+}
+$('testDevice').addEventListener('click', () => audioTest('browser'));
+$('testOxford').addEventListener('click', () => audioTest('oxford'));
+$('testGoogle').addEventListener('click', () => audioTest('google'));
+$('testStream').addEventListener('click', () => audioTest('streamelements'));
+$('resetAudio').addEventListener('click', () => {
+  stopAll(); Object.keys(failed).forEach(k => failed[k] = 0);
+  resolvedWords.clear(); dictionaryCache.clear();
+  $('diagnostic').textContent = 'Audio providers will be retried on your next playback.';
+});
+if ('speechSynthesis' in window) {
+  speechSynthesis.addEventListener?.('voiceschanged', updateVoiceList);
+}
+updateVoiceList();
+newRound();
+
+</script>
+</body>
+</html>
