@@ -39,3 +39,8 @@ To test locally, use `python -m http.server 8000` from the project directory and
 The exam uses the browser's built-in Web Speech API (`speechSynthesis`), avoiding third-party network TTS services for exam playback. Voices differ by browser, operating system and device. Browsers may suspend speech or timers when a tab is in the background, the phone locks, or audio focus changes. Keep the page visible and screen awake. Press **Start exam** to enable speech on mobile. If a voice fails or stalls, pause and replay the current word. A production-grade competition deployment should use reviewed, pre-recorded audio clips for every word/sentence, and test on the actual devices.
 
 No server-side storage or anti-cheating features are provided. This is a practice simulator, not a certified competition system.
+
+
+## Learning Lab (new)
+
+Open `learning.html` from the navigation bar. Choose Group B or C and the combined or 2026-only word bank. Listen to slow or natural pronunciation, hear the word-sentence-word sequence, reveal a spelling clue, type an answer, and review missed or due words. Progress is stored in browser localStorage on that device. Spelling chunks are visual memory aids, not phonetic syllabification. Browser speech voices vary by device. The strict exam remains separate in `index.html`.
