@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#fff4db">
   <title>Spelling Bee Practice · Updated Edition</title>
   <style>
     :root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #203148; background: #f9f7ef; }
@@ -102,10 +103,13 @@
     @media(max-width: 450px) { .mistake-grid { grid-template-columns: 1fr; } .app { width: min(100% - 20px, 930px); padding-top: 18px; } .settings { grid-template-columns: 1fr; } .field-bank { grid-column: auto; } .options-grid { grid-template-columns: 1fr; } .answer-row { flex-direction: column; } .answer-row .btn { width: 100%; } .next-actions .btn { flex: 1; } .btn { padding-left: 12px; padding-right: 12px; } }
     @media(prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
   </style>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/practice-theme.css">
 </head>
-<body>
+<body class="practice-page">
+<header class="top site-nav"><a class="brand" href="index.html"><span class="brand-bee" aria-hidden="true">🐝</span><span>Spelling Bee <b>2026</b><small>Learn • Play • Shine!</small></span></a><nav aria-label="Main navigation"><a href="index.html" data-page="exam">🏆 <span>Exam Studio</span></a><a href="learning.html" data-page="learning">🧩 <span>Learning Lab</span></a><a href="practice.html" data-page="practice" aria-current="page" class="current">✏️ <span>Practice</span></a></nav></header>
 <main class="app">
-  <header class="masthead">
+  <header class="masthead"><div class="hero-mascot" aria-hidden="true">🐝<span>✨</span></div>
     <div class="mark" aria-hidden="true">🐝</div>
     <h1>Spelling Bee Practice</h1>
     <p class="intro">Only three spoken parts: word → sentence → word. No extra spoken introduction. Practise the original and new word lists with UK or US pronunciation.</p>

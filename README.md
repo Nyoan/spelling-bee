@@ -44,3 +44,6 @@ No server-side storage or anti-cheating features are provided. This is a practic
 ## Learning Lab (new)
 
 Open `learning.html` from the navigation bar. Choose Group B or C and the combined or 2026-only word bank. Listen to slow or natural pronunciation, hear the word-sentence-word sequence, reveal a spelling clue, type an answer, and review missed or due words. Progress is stored in browser localStorage on that device. Spelling chunks are visual memory aids, not phonetic syllabification. Browser speech voices vary by device. The strict exam remains separate in `index.html`.
+
+## Unified kid-friendly theme
+All three pages now share the same bee-themed navigation, warm yellow/orange and mint palette, friendly typography, large touch targets and responsive layouts. The original practice engine remains embedded in `practice.html`; the shared stylesheet and `css/practice-theme.css` restyle it without modifying its logic.
