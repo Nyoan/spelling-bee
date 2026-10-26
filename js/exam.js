@@ -3,6 +3,9 @@ const $ = id => document.getElementById(id);
 const WORD_COUNT = 25;
 const storageKey = 'spellingBee2026ExamHistoryV1';
 const pools = {};
+let categoryInfo = [];
+function selectedPoolKey(){ const source=$('source').value; return source==='patterns' ? `B-pattern-${$('patternCategory').value}` : `${$('group').value}-${source}`; }
+function selectedSourceName(){ const s=$('source').value; if(s==='combined')return 'Combined Group B/C'; if(s==='2026')return '2026 PDF'; if(s==='patterns')return `Pattern: ${categoryInfo.find(c=>c.id===$('patternCategory').value)?.name||'Drill'}`; return s==='jack1'?'Jack 1 notes':s==='jack2'?'Jack 2 notes':'Jack 1 + 2 notes'; }
 let exam = null, timer = null, runId = 0, activeSpeech = null, voices = [];
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -43,21 +46,60 @@ function shuffle(items) { const a = items.slice(); for(let i=a.length-1;i>0;i--)
 async function loadBanks() {
  try {
   for (const group of ['B','C']) for (const source of ['2026','combined']) {
-   const response = await fetch(`data/group-${group.toLowerCase()}-${source}.json`, {cache:'no-cache'});
-   if (!response.ok) throw new Error(`Could not load Group ${group} (${source}).`);
-   const data = await response.json();
-   if (!Array.isArray(data) || data.length < WORD_COUNT) throw new Error(`Not enough words in Group ${group}.`);
-   pools[`${group}-${source}`] = data;
+   const response=await fetch(`data/group-${group.toLowerCase()}-${source}.json`,{cache:'no-cache'});
+   if(!response.ok)throw new Error(`Could not load Group ${group} (${source}).`);
+   const words=await response.json();
+   if(!Array.isArray(words)||words.length<1)throw new Error(`Empty Group ${group} bank.`);
+   pools[`${group}-${source}`]=words;
   }
-  $('start').disabled = false; updateBankStatus();
- } catch (err) { $('bankStatus').textContent = `Unable to load word lists: ${err.message} Serve this folder through GitHub Pages or a local web server, not file://.`; }
+  for(const [source,file] of [['jack1','jack-1'],['jack2','jack-2'],['jackCombined','jack-combined']]){
+   const response=await fetch(`data/${file}.json`,{cache:'no-cache'});
+   if(!response.ok)throw new Error(`Could not load ${file}.`);
+   pools[`B-${source}`]=await response.json();
+  }
+  const response=await fetch('data/spelling-categories.json',{cache:'no-cache'});
+  if(!response.ok)throw new Error('Could not load pattern drills.');
+  categoryInfo=await response.json();
+  for(const item of categoryInfo){
+   pools[`B-pattern-${item.id}`]=item.words;
+   $('patternCategory').add(new Option(`${item.name} · ${item.words.length} words`,item.id));
+  }
+  // Grade 5-6 does not use the Grade 3-4 Jack observations or category drills.
+  for(const option of $('source').options){
+   if(['jack1','jack2','jackCombined','patterns'].includes(option.value))option.dataset.onlyB='true';
+  }
+  applyQuerySelection();
+  $('start').disabled=false;updateSourceChoices();
+ }catch(err){$('bankStatus').textContent=`Unable to load word lists: ${err.message} Use GitHub Pages or a local web server, not file://.`;}
 }
-function updateBankStatus() { const pool = pools[`${$('group').value}-${$('source').value}`]; $('bankStatus').textContent = pool ? `${pool.length} unique words available. The exam will choose 25 without repeats.` : 'Loading…'; }
-$('group').addEventListener('change', updateBankStatus); $('source').addEventListener('change', updateBankStatus);
+function applyQuerySelection(){
+ const q=new URLSearchParams(window.location.search);
+ if(['B','C'].includes(q.get('group')))$('group').value=q.get('group');
+ if([...$('source').options].some(x=>x.value===q.get('source')))$('source').value=q.get('source');
+ if(categoryInfo.some(c=>c.id===q.get('category')))$('patternCategory').value=q.get('category');
+}
+function updateSourceChoices(){
+ const isB=$('group').value==='B';
+ for(const opt of $('source').options){if(opt.dataset.onlyB==='true'){opt.disabled=!isB;opt.hidden=!isB;}}
+ if(!isB&&['jack1','jack2','jackCombined','patterns'].includes($('source').value))$('source').value='combined';
+ $('patternField').hidden=$('source').value!=='patterns';
+ updateBankStatus();
+}
+function updateBankStatus(){
+ const pool=pools[selectedPoolKey()];
+ if(!pool){$('bankStatus').textContent='Loading…';return;}
+ const sample=Math.min(WORD_COUNT,pool.length);
+ $('start').textContent=`Start ${sample}-word exam →`;
+ const cat=categoryInfo.find(c=>c.id===$('patternCategory').value);
+ $('bankStatus').textContent=`${pool.length} unique words available. This exam uses ${sample} without repeats.`+( $('source').value==='patterns'&&cat ? ` Skill: ${cat.description}` : '');
+}
+$('group').addEventListener('change',updateSourceChoices);
+$('source').addEventListener('change',updateSourceChoices);
+$('patternCategory').addEventListener('change',updateBankStatus);
 function renderQuestion() {
- $('counter').textContent = `${ordinal(exam.index+1)} / ${WORD_COUNT}`;
+ $('counter').textContent = `${ordinal(exam.index+1)} / ${exam.total}`;
  $('examGroup').textContent = `GROUP ${exam.group} · ${exam.method === 'paper' ? 'PAPER' : 'TYPING'}`;
- $('progress').style.width = `${exam.index / WORD_COUNT * 100}%`;
+ $('progress').style.width = `${exam.index / exam.total * 100}%`;
  $('typingArea').hidden = exam.method !== 'typing';
  $('answer').value = exam.answers[exam.index] || '';
  $('countdown').textContent = '--';
@@ -103,15 +145,16 @@ async function advance(token) {
  if (!exam || token!==runId || exam.paused) return;
  if (exam.method==='typing') exam.answers[exam.index]=$('answer').value.trim();
  exam.index++;
- if (exam.index>=WORD_COUNT) { finishExam(false); return; }
+ if (exam.index>=exam.total) { finishExam(false); return; }
  // New question begins automatically without another click.
  await readQuestion(token,true);
 }
 function startExam() {
  invalidate();
  const group=$('group').value, source=$('source').value;
- const pool=pools[`${group}-${source}`]; if (!pool) return;
- exam={group,source,method:$('method').value,seconds:Number($('seconds').value),accent:$('accent').value,speed:Number($('speed').value),words:shuffle(pool).slice(0,WORD_COUNT),answers:Array(WORD_COUNT).fill(''),index:0,phase:'speaking',remaining:0,paused:false,startedAt:new Date().toISOString()};
+ const pool=pools[selectedPoolKey()]; if(!pool?.length)return;
+ const total=Math.min(WORD_COUNT,pool.length);
+ exam={group,source,sourceLabel:selectedSourceName(),category:source==='patterns'?$('patternCategory').value:null,total,method:$('method').value,seconds:Number($('seconds').value),accent:$('accent').value,speed:Number($('speed').value),words:shuffle(pool).slice(0,total),answers:Array(total).fill(''),index:0,phase:'speaking',remaining:0,paused:false,startedAt:new Date().toISOString()};
  show('exam'); $('pause').textContent='Pause exam';
  readQuestion(runId,true);
 }
@@ -141,19 +184,19 @@ function finishExam(early) {
  if (!exam) return;
  if (exam.method==='typing' && exam.phase==='countdown' && exam.index<WORD_COUNT) exam.answers[exam.index]=$('answer').value.trim();
  invalidate(); exam.finishedAt=new Date().toISOString(); exam.completed=!early;
- const done=early ? Math.min(WORD_COUNT,exam.index+1) : WORD_COUNT;
- $('resultMeta').textContent=`Group ${exam.group} · ${exam.source==='2026'?'2026 PDF only':'Combined lists'} · ${done} of 25 words · ${exam.method==='paper'?'Paper exam':'Typing exam'}`;
+ const done=early ? Math.min(exam.total,exam.index+1) : exam.total;
+ $('resultMeta').textContent=`Group ${exam.group} · ${exam.sourceLabel} · ${done} of ${exam.total} words · ${exam.method==='paper'?'Paper exam':'Typing exam'}`;
  let correct=0;
  const rows=exam.words.map((item,i)=>{
   const answer=exam.answers[i]||''; const ok=clean(answer)===clean(item.word);
   if (exam.method==='typing' && ok) correct++;
   return `<tr><td>${i+1}</td><td><strong>${escapeHTML(item.word)}</strong></td><td>${escapeHTML(item.sentence)}</td><td>${exam.method==='typing' ? escapeHTML(answer||'—') : '____________'}</td><td>${exam.method==='typing' ? `<span class="${ok?'good':'bad'}">${ok?'✓':'✕'}</span>` : '—'}</td></tr>`;
  });
- $('scoreBlock').textContent=exam.method==='typing' ? `Score: ${correct} / 25 (${Math.round(correct/25*100)}%)` : 'Answer key · Check your written answers';
+ $('scoreBlock').textContent=exam.method==='typing' ? `Score: ${correct} / ${exam.total} (${Math.round(correct/exam.total*100)}%)` : 'Answer key · Check your written answers';
  $('review').innerHTML=`<table><thead><tr><th>#</th><th>Correct word</th><th>Example sentence</th><th>${exam.method==='typing'?'Your answer':'Paper answer'}</th><th>Result</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
  try {
   const history=JSON.parse(localStorage.getItem(storageKey)||'[]');
-  history.unshift({group:exam.group,source:exam.source,method:exam.method,date:exam.finishedAt,completed:exam.completed,score:exam.method==='typing'?correct:null,words:exam.words.map((w,i)=>({word:w.word,answer:exam.answers[i],correct:clean(exam.answers[i])===clean(w.word)}))});
+  history.unshift({group:exam.group,source:exam.source,category:exam.category,method:exam.method,date:exam.finishedAt,completed:exam.completed,score:exam.method==='typing'?correct:null,words:exam.words.map((w,i)=>({word:w.word,answer:exam.answers[i],correct:clean(exam.answers[i])===clean(w.word)}))});
   localStorage.setItem(storageKey,JSON.stringify(history.slice(0,40)));
  } catch (_) { /* Storage can be disabled by privacy settings. */ }
  $('progress').style.width='100%'; show('results');

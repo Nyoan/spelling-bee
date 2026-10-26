@@ -4,7 +4,7 @@ const KEY='spellingBeeLearningV1';
 const traps={
  scissors:'The c is silent at the beginning: sc + issors.',government:'Keep the n in govern before adding -ment.',mischievous:'There is no extra i after v: mis + chiev + ous.',conscious:'Watch the unusual sc in con + scious.',arrangement:'Arrange + ment. Keep the double r.',thesaurus:'Watch the vowel group au in thesaurus.',thumbnail:'Thumb + nail. The b is written even when it is hard to hear.',stomach:'Watch the ch ending.',cucumber:'Cu + cum + ber: the middle has cum.',comfortable:'Comfort + able. Some speakers reduce syllables.',bewildered:'Be + wilder + ed.',accommodation:'Double c and double m.',grammar:'Double m in grammar.',business:'Business has an unusual spelling compared with its pronunciation.',salmon:'The l is normally silent.',written:'Double t in written.',dictionary:'Dictionary includes the letters tion.',characteristic:'Character + istic.',application:'Double p in application.',calibration:'Calibrat + ion.',friendliness:'Friendly + ness: y changes to i.'
 };
-let deck=[],position=0,checked=false,voices=[];
+let deck=[],position=0,checked=false,voices=[],categories=[];
 const normalize=s=>String(s||'').trim().toLocaleLowerCase('en');
 const history=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch{return {}}};
 function saveHistory(h){try{localStorage.setItem(KEY,JSON.stringify(h))}catch{$('learnStatus').textContent='Browser storage unavailable; progress will not be saved.'}}
@@ -18,5 +18,50 @@ function showWord(){$('lessonWord').textContent=deck[position].word}
 function clue(){const w=deck[position];const lower=normalize(w.word);$('lessonClue').textContent=traps[lower]||`Spelling chunks: ${w.word.match(/.{1,3}/g).join(' · ')}. These are visual memory chunks, not pronunciation syllables.`;$('lessonClue').hidden=false}
 function mark(correct){const w=deck[position],h=history(),k=currentKey(w),old=h[k]||{attempts:0,correct:0,streak:0};old.attempts++;if(correct){old.correct++;old.streak++;}else old.streak=0;old.last=Date.now();old.next=Date.now()+(correct?Math.min(14,Math.pow(2,old.streak-1))*86400000:0);h[k]=old;saveHistory(h)}
 function check(){if(!deck.length||checked)return;const answer=$('learnAnswer').value.trim();if(!answer){$('answerFeedback').textContent='Type your spelling before checking.';return}checked=true;const correct=normalize(answer)===normalize(deck[position].word);mark(correct);showWord();$('answerFeedback').textContent=correct?'✓ Correct! Great work. Review this word again in a future session.':`Not quite. Correct spelling: ${deck[position].word}. Listen again and try to remember the tricky letters.`;$('answerFeedback').className=correct?'helper good':'helper bad'}
-async function load(){const group=$('learnGroup').value,source=$('learnSource').value;const file=`data/group-${group.toLowerCase()}-${source==='2026'?'2026':'combined'}.json`;try{const res=await fetch(file);if(!res.ok)throw new Error(`HTTP ${res.status}`);let words=await res.json();const h=history(),focus=$('learnFocus').value,now=Date.now();if(focus==='mistakes')words=words.filter(w=>{const x=h[currentKey(w)];return x&&x.attempts>x.correct});if(focus==='due')words=words.filter(w=>{const x=h[currentKey(w)];return x&&x.next<=now});deck=shuffle(words.slice());position=0;if(!deck.length){$('lesson').hidden=true;$('learnStatus').textContent=focus==='all'?'No words found.':'No words in this review category yet. Try All words or practise some new words first.';return}$('learnStatus').textContent=`Loaded ${deck.length} unique words for Group ${group}.`;render()}catch(e){$('lesson').hidden=true;$('learnStatus').textContent=`Could not load the word bank (${e.message}). Open this project through GitHub Pages or a local web server, not file://.`}}
+function learningSourceFile(group,source){
+ if(source==='jack1')return 'data/jack-1.json';
+ if(source==='jack2')return 'data/jack-2.json';
+ if(source==='jackCombined')return 'data/jack-combined.json';
+ if(source==='patterns')return `data/pattern-${$('learnCategory').value}.json`;
+ return `data/group-${group.toLowerCase()}-${source==='2026'?'2026':'combined'}.json`;
+}
+function updateLearnChoices(){
+ const isB=$('learnGroup').value==='B';
+ for(const opt of $('learnSource').options){
+  if(['jack1','jack2','jackCombined','patterns'].includes(opt.value)){opt.disabled=!isB;opt.hidden=!isB;}
+ }
+ if(!isB&&['jack1','jack2','jackCombined','patterns'].includes($('learnSource').value))$('learnSource').value='combined';
+ $('learnCategoryField').hidden=$('learnSource').value!=='patterns';
+}
+async function loadCategories(){
+ try{
+  const res=await fetch('data/spelling-categories.json',{cache:'no-cache'});
+  if(!res.ok)throw new Error('Could not load pattern categories');
+  categories=await res.json();
+  for(const c of categories)$('learnCategory').add(new Option(`${c.name} · ${c.words.length}`,c.id));
+  const q=new URLSearchParams(window.location.search);
+  if(['B','C'].includes(q.get('group')))$('learnGroup').value=q.get('group');
+  if([...$('learnSource').options].some(x=>x.value===q.get('source')))$('learnSource').value=q.get('source');
+  if(categories.some(x=>x.id===q.get('category')))$('learnCategory').value=q.get('category');
+  updateLearnChoices();
+ }catch(e){$('learnStatus').textContent=`Pattern categories unavailable (${e.message}). Other lists can still be used.`;}
+}
+async function load(){
+ const group=$('learnGroup').value,source=$('learnSource').value;
+ try{
+  const res=await fetch(learningSourceFile(group,source));
+  if(!res.ok)throw new Error(`HTTP ${res.status}`);
+  let words=await res.json();
+  const h=history(),focus=$('learnFocus').value,now=Date.now();
+  if(focus==='mistakes')words=words.filter(w=>{const x=h[currentKey(w)];return x&&x.attempts>x.correct});
+  if(focus==='due')words=words.filter(w=>{const x=h[currentKey(w)];return x&&x.next<=now});
+  deck=shuffle(words.slice());position=0;
+  if(!deck.length){$('lesson').hidden=true;$('learnStatus').textContent=focus==='all'?'No words found.':'No words in this review category yet. Try All words or practise some new words first.';return;}
+  $('learnStatus').textContent=`Loaded ${deck.length} words for ${source==='patterns'?categories.find(x=>x.id===$('learnCategory').value)?.name:'Group '+group}.`;
+  render();
+ }catch(e){$('lesson').hidden=true;$('learnStatus').textContent=`Could not load the word bank (${e.message}). Use GitHub Pages or a local web server, not file://.`;}
+}
+$('learnGroup').addEventListener('change',updateLearnChoices);
+$('learnSource').addEventListener('change',updateLearnChoices);
+loadCategories();
 $('loadWords').addEventListener('click',load);$('listenSlow').addEventListener('click',()=>say(deck[position].word,0.65));$('listenNormal').addEventListener('click',()=>say(deck[position].word,1));$('listenSequence').addEventListener('click',sequence);$('showClue').addEventListener('click',clue);$('revealWord').addEventListener('click',showWord);$('checkAnswer').addEventListener('click',check);$('learnAnswer').addEventListener('keydown',e=>{if(e.key==='Enter')check()});$('nextWord').addEventListener('click',()=>{if(!deck.length)return;position++;if(position>=deck.length){$('lesson').hidden=true;$('learnStatus').textContent='You completed this learning deck! Start another session to review.';return}render()});$('resetHistory').addEventListener('click',()=>{if(confirm('Clear all Learning Lab progress and mistake history on this device?')){localStorage.removeItem(KEY);$('learnStatus').textContent='Learning Lab history cleared.'}});

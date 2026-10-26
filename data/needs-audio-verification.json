@@ -1,0 +1,58 @@
+[
+  {
+    "jack": 1,
+    "number": 10,
+    "heard": "Submergesent",
+    "possibilities": [
+      "Submergence",
+      "Submergent"
+    ]
+  },
+  {
+    "jack": 1,
+    "number": 13,
+    "heard": "Fatherism",
+    "possibilities": [
+      "Favoritism",
+      "Fatalism",
+      "Fatherism"
+    ]
+  },
+  {
+    "jack": 1,
+    "number": 18,
+    "heard": "Decendent",
+    "possibilities": [
+      "Descendant",
+      "Decedent"
+    ]
+  },
+  {
+    "jack": 2,
+    "number": 8,
+    "heard": "Telecard",
+    "possibilities": [
+      "Telecard",
+      "Telecast"
+    ]
+  },
+  {
+    "jack": 2,
+    "number": 12,
+    "heard": "Vegencefull",
+    "possibilities": [
+      "Vengeful",
+      "Vengeanceful"
+    ]
+  },
+  {
+    "jack": 2,
+    "number": 13,
+    "heard": "Aturns",
+    "possibilities": [
+      "Attorns",
+      "Atone",
+      "Attorneys"
+    ]
+  }
+]

@@ -1,0 +1,1342 @@
+[
+  {
+    "id": "endings",
+    "name": "-tion / -sion endings",
+    "description": "Compare similar-sounding endings such as -tion, -sion and -ation.",
+    "observed": [
+      "Inspiration",
+      "Animation",
+      "Occupation",
+      "Celebration",
+      "Permission",
+      "Delusion"
+    ],
+    "words": [
+      {
+        "word": "Inspiration",
+        "sentence": "Her science teacher was an inspiration to the class.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Animation",
+        "sentence": "The students created a short animation about bees.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Occupation",
+        "sentence": "A firefighter is one type of occupation.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Celebration",
+        "sentence": "The school held a celebration after the spelling bee.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Permission",
+        "sentence": "Ask for permission before leaving the classroom.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Delusion",
+        "sentence": "The character’s delusion made it difficult to understand reality.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Action",
+        "sentence": "The class took action to clean the playground.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Attention",
+        "sentence": "Please pay attention to the spelling of each word.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Collection",
+        "sentence": "Her coin collection filled a small album.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Direction",
+        "sentence": "The sign pointed in the direction of the library.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Explanation",
+        "sentence": "The teacher gave a clear explanation of the rule.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Information",
+        "sentence": "The website provides information about the competition.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Imagination",
+        "sentence": "His imagination helped him invent a new story.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Invitation",
+        "sentence": "Maya sent an invitation to her birthday party.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Protection",
+        "sentence": "The helmet offers protection while cycling.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Education",
+        "sentence": "Every child deserves a good education.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Decision",
+        "sentence": "He made a decision after thinking carefully.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Confusion",
+        "sentence": "The two similar names caused confusion.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Revision",
+        "sentence": "Daily revision helped her remember difficult words.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Division",
+        "sentence": "We practised division in maths class.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Conclusion",
+        "sentence": "The story reached a surprising conclusion.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Expansion",
+        "sentence": "The library planned an expansion with more shelves.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Collision",
+        "sentence": "The collision between the toy cars made a loud noise.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Persuasion",
+        "sentence": "With gentle persuasion, he agreed to try again.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      },
+      {
+        "word": "Competition",
+        "sentence": "The competition included students from many schools.",
+        "origin": "Pattern drill · -tion / -sion endings",
+        "pattern": "endings"
+      }
+    ]
+  },
+  {
+    "id": "academic",
+    "name": "Greek & Latin academic roots",
+    "description": "Build familiarity with science, maths and academic word families.",
+    "observed": [
+      "Monopoly",
+      "Hypothesis",
+      "Hypothetical",
+      "Chronic",
+      "Gradient",
+      "Insulator",
+      "Vaccinate",
+      "Scorpion",
+      "Resurgence",
+      "Predominant"
+    ],
+    "words": [
+      {
+        "word": "Monopoly",
+        "sentence": "The board game teaches children about a monopoly on properties.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Hypothesis",
+        "sentence": "Our hypothesis predicted that the seed would grow faster in sunlight.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Hypothetical",
+        "sentence": "The teacher asked a hypothetical question about life on Mars.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Chronic",
+        "sentence": "A chronic problem continues for a long time.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Gradient",
+        "sentence": "The road had a steep gradient near the hill.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Insulator",
+        "sentence": "Rubber is an insulator that helps protect us from electricity.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Vaccinate",
+        "sentence": "Doctors vaccinate people to help prevent certain diseases.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Scorpion",
+        "sentence": "A scorpion sheltered beneath a rock in the desert.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Resurgence",
+        "sentence": "The town saw a resurgence of interest in traditional crafts.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Predominant",
+        "sentence": "Blue was the predominant color in the painting.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Microscope",
+        "sentence": "We used a microscope to examine a leaf.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Telescope",
+        "sentence": "She looked at the moon through a telescope.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Geometry",
+        "sentence": "We studied triangles and circles in geometry.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Geography",
+        "sentence": "Geography helps us learn about countries and rivers.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Astronomy",
+        "sentence": "Astronomy is the study of stars and planets.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Biology",
+        "sentence": "In biology class, we learned about cells.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Chemistry",
+        "sentence": "The chemistry experiment made bubbles appear.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Diameter",
+        "sentence": "The diameter runs across the center of a circle.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Perimeter",
+        "sentence": "The perimeter is the distance around a shape.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Laboratory",
+        "sentence": "We wore safety glasses in the laboratory.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Atmosphere",
+        "sentence": "Earth has an atmosphere that surrounds the planet.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Symmetry",
+        "sentence": "The butterfly’s wings show symmetry.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Cylinder",
+        "sentence": "The tin is shaped like a cylinder.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Equation",
+        "sentence": "Solve the equation before checking your answer.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      },
+      {
+        "word": "Experiment",
+        "sentence": "The experiment tested how plants respond to light.",
+        "origin": "Pattern drill · Greek & Latin academic roots",
+        "pattern": "academic"
+      }
+    ]
+  },
+  {
+    "id": "affixes",
+    "name": "Prefixes, suffixes & word families",
+    "description": "Notice how adding prefixes and suffixes changes spelling and meaning.",
+    "observed": [
+      "Simply",
+      "Morality",
+      "Selective",
+      "Delightful",
+      "Curious",
+      "Supremacy",
+      "Predominant",
+      "Resurgence",
+      "Inspiration",
+      "Animation"
+    ],
+    "words": [
+      {
+        "word": "Simply",
+        "sentence": "Please explain the rules simply so everyone can follow them.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Morality",
+        "sentence": "The story asks questions about honesty and morality.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Selective",
+        "sentence": "The club is selective about choosing new members.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Delightful",
+        "sentence": "The children had a delightful afternoon at the park.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Curious",
+        "sentence": "The curious child wanted to know how magnets work.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Supremacy",
+        "sentence": "The two teams competed for supremacy in the tournament.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Predominant",
+        "sentence": "Blue was the predominant color in the painting.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Resurgence",
+        "sentence": "The town saw a resurgence of interest in traditional crafts.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Inspiration",
+        "sentence": "Her science teacher was an inspiration to the class.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Animation",
+        "sentence": "The students created a short animation about bees.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Reusable",
+        "sentence": "She filled her reusable water bottle.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Uncertain",
+        "sentence": "He was uncertain which answer to choose.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Disagree",
+        "sentence": "Friends can disagree and still be kind.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Disappear",
+        "sentence": "The rainbow seemed to disappear behind the clouds.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Happiness",
+        "sentence": "Her happiness was clear from her smile.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Careless",
+        "sentence": "A careless mistake changed the answer.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Careful",
+        "sentence": "Be careful when crossing the road.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Kindness",
+        "sentence": "Small acts of kindness can brighten a day.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Movement",
+        "sentence": "We watched the slow movement of the turtle.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Reconsider",
+        "sentence": "She decided to reconsider her first answer.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Unusual",
+        "sentence": "We found an unusual shell on the beach.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Impossible",
+        "sentence": "It seemed impossible until they tried again.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Misunderstand",
+        "sentence": "Please ask if you misunderstand the directions.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Equality",
+        "sentence": "Our classroom rules are based on equality.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      },
+      {
+        "word": "Comfortable",
+        "sentence": "The soft chair was comfortable to sit on.",
+        "origin": "Pattern drill · Prefixes, suffixes & word families",
+        "pattern": "affixes"
+      }
+    ]
+  },
+  {
+    "id": "doubles",
+    "name": "Double letters & look-alike vowels",
+    "description": "Watch for consonants that double and vowel sequences that are easy to miss.",
+    "observed": [
+      "Accumulate",
+      "Dilemma",
+      "Clutter",
+      "Annoying",
+      "Syllable",
+      "Permission"
+    ],
+    "words": [
+      {
+        "word": "Accumulate",
+        "sentence": "Dust can accumulate on shelves if nobody cleans them.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Dilemma",
+        "sentence": "She faced a dilemma when two friends invited her to different parties.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Clutter",
+        "sentence": "Please clear the clutter from your desk.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Annoying",
+        "sentence": "The buzzing mosquito made an annoying sound.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Syllable",
+        "sentence": "The word banana has three syllables.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Permission",
+        "sentence": "Ask for permission before leaving the classroom.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Necessary",
+        "sentence": "It is necessary to bring a pencil to class.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Occasion",
+        "sentence": "The awards night was a special occasion.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Address",
+        "sentence": "Write your home address on the form.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Successful",
+        "sentence": "The team was successful after weeks of training.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Committee",
+        "sentence": "The committee planned the school festival.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Embarrass",
+        "sentence": "Please do not embarrass anyone for making a mistake.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Recommend",
+        "sentence": "I recommend this book to young readers.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Parallel",
+        "sentence": "The railway tracks seem parallel.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Balloon",
+        "sentence": "The yellow balloon floated above the table.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Different",
+        "sentence": "The twins have different favorite colors.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Tomorrow",
+        "sentence": "We will visit the museum tomorrow.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Collection",
+        "sentence": "Her coin collection filled a small album.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Attractive",
+        "sentence": "The garden had many attractive flowers.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Excellent",
+        "sentence": "She received an excellent score on the quiz.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Immediate",
+        "sentence": "The school needed an immediate response.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Opposite",
+        "sentence": "The bakery is on the opposite side of the street.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Suppress",
+        "sentence": "He tried to suppress a giggle during the play.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Appearance",
+        "sentence": "The magician made a surprise appearance.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      },
+      {
+        "word": "Accommodate",
+        "sentence": "The hall can accommodate a hundred students.",
+        "origin": "Pattern drill · Double letters & look-alike vowels",
+        "pattern": "doubles"
+      }
+    ]
+  },
+  {
+    "id": "irregular",
+    "name": "Irregular & borrowed spellings",
+    "description": "Practise spellings that cannot easily be guessed from their sounds.",
+    "observed": [
+      "Genuine",
+      "Sabotage",
+      "Abattoir",
+      "Twinge",
+      "Shelves",
+      "Malign",
+      "Redeem"
+    ],
+    "words": [
+      {
+        "word": "Genuine",
+        "sentence": "He gave his friend a genuine smile.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Sabotage",
+        "sentence": "Nobody should sabotage another team’s hard work.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Abattoir",
+        "sentence": "The old abattoir was located outside the town.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Twinge",
+        "sentence": "She felt a twinge of pain in her ankle after running.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Shelves",
+        "sentence": "We arranged the books neatly on the library shelves.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Malign",
+        "sentence": "It is unfair to malign someone without knowing the facts.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Redeem",
+        "sentence": "You can redeem the coupon for a free notebook.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Bouquet",
+        "sentence": "He gave his grandmother a bouquet of flowers.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Bureau",
+        "sentence": "A small wooden bureau stood by the window.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Chauffeur",
+        "sentence": "The chauffeur drove the guests to the hotel.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Restaurant",
+        "sentence": "We ate lunch at a restaurant near school.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Silhouette",
+        "sentence": "The bird’s silhouette appeared against the sunset.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Unique",
+        "sentence": "Each snowflake has a unique pattern.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Foreign",
+        "sentence": "She is learning a foreign language.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Ceiling",
+        "sentence": "The ceiling was painted bright white.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Receive",
+        "sentence": "You will receive a certificate after the contest.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Believe",
+        "sentence": "I believe you can improve with practice.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Neighbor",
+        "sentence": "Our neighbor grows roses in the garden.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Courage",
+        "sentence": "It takes courage to speak in front of a crowd.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Leisure",
+        "sentence": "Reading is her favorite leisure activity.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Rhythm",
+        "sentence": "The drummer kept a steady rhythm.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Yacht",
+        "sentence": "A white yacht sailed across the harbor.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Wednesday",
+        "sentence": "Our spelling practice is on Wednesday.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Knowledge",
+        "sentence": "Reading builds our knowledge of the world.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      },
+      {
+        "word": "Enough",
+        "sentence": "We packed enough food for the trip.",
+        "origin": "Pattern drill · Irregular & borrowed spellings",
+        "pattern": "irregular"
+      }
+    ]
+  },
+  {
+    "id": "abstract",
+    "name": "Abstract vocabulary & meanings",
+    "description": "Learn words for concepts, qualities and situations, not just objects.",
+    "observed": [
+      "Morality",
+      "Inspiration",
+      "Resurgence",
+      "Supremacy",
+      "Essence",
+      "Delusion",
+      "Hypothesis",
+      "Dilemma",
+      "Permission",
+      "Occupation"
+    ],
+    "words": [
+      {
+        "word": "Morality",
+        "sentence": "The story asks questions about honesty and morality.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Inspiration",
+        "sentence": "Her science teacher was an inspiration to the class.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Resurgence",
+        "sentence": "The town saw a resurgence of interest in traditional crafts.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Supremacy",
+        "sentence": "The two teams competed for supremacy in the tournament.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Essence",
+        "sentence": "Kindness is the essence of their friendship.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Delusion",
+        "sentence": "The character’s delusion made it difficult to understand reality.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Hypothesis",
+        "sentence": "Our hypothesis predicted that the seed would grow faster in sunlight.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Dilemma",
+        "sentence": "She faced a dilemma when two friends invited her to different parties.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Permission",
+        "sentence": "Ask for permission before leaving the classroom.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Occupation",
+        "sentence": "A firefighter is one type of occupation.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Integrity",
+        "sentence": "Integrity means doing what is right even when alone.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Honesty",
+        "sentence": "Honesty helps friends trust each other.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Patience",
+        "sentence": "Learning to play the violin takes patience.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Confidence",
+        "sentence": "Practice can improve your confidence.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Responsibility",
+        "sentence": "Feeding the pet is his responsibility.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Liberty",
+        "sentence": "The story is about the importance of liberty.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Equality",
+        "sentence": "Our classroom rules are based on equality.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Justice",
+        "sentence": "The judge worked to ensure justice for everyone.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Loyalty",
+        "sentence": "The dog showed loyalty to its owner.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Authority",
+        "sentence": "The principal has authority to make school rules.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Wisdom",
+        "sentence": "Grandfather shared his wisdom with us.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Consequence",
+        "sentence": "Every choice can have a consequence.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Ambition",
+        "sentence": "Her ambition is to become a scientist.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Curiosity",
+        "sentence": "Curiosity led him to ask more questions.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      },
+      {
+        "word": "Compassion",
+        "sentence": "She showed compassion for the injured bird.",
+        "origin": "Pattern drill · Abstract vocabulary & meanings",
+        "pattern": "abstract"
+      }
+    ]
+  },
+  {
+    "id": "verbs",
+    "name": "Challenging action words",
+    "description": "Train verbs with unexpected consonants, endings and syllables.",
+    "observed": [
+      "Redeem",
+      "Sabotage",
+      "Accumulate",
+      "Bewilder",
+      "Diminish",
+      "Surpass",
+      "Deprecate",
+      "Vaccinate",
+      "Surge"
+    ],
+    "words": [
+      {
+        "word": "Redeem",
+        "sentence": "You can redeem the coupon for a free notebook.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Sabotage",
+        "sentence": "Nobody should sabotage another team’s hard work.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Accumulate",
+        "sentence": "Dust can accumulate on shelves if nobody cleans them.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Bewilder",
+        "sentence": "The complicated instructions might bewilder a new player.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Diminish",
+        "sentence": "The sound began to diminish as the train moved away.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Surpass",
+        "sentence": "With practice, you may surpass your previous score.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Deprecate",
+        "sentence": "Some people deprecate ideas they do not understand.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Vaccinate",
+        "sentence": "Doctors vaccinate people to help prevent certain diseases.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Surge",
+        "sentence": "A sudden surge of wind shook the trees.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Persuade",
+        "sentence": "She tried to persuade her friend to join the club.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Investigate",
+        "sentence": "The students will investigate how rainbows form.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Consider",
+        "sentence": "Please consider all the options before choosing.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Recognize",
+        "sentence": "I can recognize my friend’s handwriting.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Determine",
+        "sentence": "We will determine which bridge is longer.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Appreciate",
+        "sentence": "I appreciate your help with my homework.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Contribute",
+        "sentence": "Everyone can contribute to the class project.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Evaluate",
+        "sentence": "The teacher will evaluate our presentations.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Observe",
+        "sentence": "We went outside to observe the birds.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Examine",
+        "sentence": "The doctor will examine the injured knee.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Interrupt",
+        "sentence": "Please do not interrupt someone who is speaking.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Improve",
+        "sentence": "Reading every day can improve your vocabulary.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Preserve",
+        "sentence": "We must preserve the old books carefully.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Resist",
+        "sentence": "Try to resist the temptation to look at the answer.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Illuminate",
+        "sentence": "Streetlights illuminate the road at night.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      },
+      {
+        "word": "Encourage",
+        "sentence": "Our teacher will encourage us to keep trying.",
+        "origin": "Pattern drill · Challenging action words",
+        "pattern": "verbs"
+      }
+    ]
+  },
+  {
+    "id": "everyday",
+    "name": "Compounds & everyday traps",
+    "description": "Mix familiar words, compounds and words whose sounds can mislead.",
+    "observed": [
+      "Bandwagon",
+      "Bystander",
+      "Sharpener",
+      "Scorpion",
+      "Shelves",
+      "Resident",
+      "Simply",
+      "Curious",
+      "Delightful",
+      "Twinge"
+    ],
+    "words": [
+      {
+        "word": "Bandwagon",
+        "sentence": "Soon everyone jumped on the bandwagon to join the new game.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Bystander",
+        "sentence": "A bystander helped the child find a teacher.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Sharpener",
+        "sentence": "She borrowed a pencil sharpener from her classmate.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Scorpion",
+        "sentence": "A scorpion sheltered beneath a rock in the desert.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Shelves",
+        "sentence": "We arranged the books neatly on the library shelves.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Resident",
+        "sentence": "A resident of the village showed us the old bridge.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Simply",
+        "sentence": "Please explain the rules simply so everyone can follow them.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Curious",
+        "sentence": "The curious child wanted to know how magnets work.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Delightful",
+        "sentence": "The children had a delightful afternoon at the park.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Twinge",
+        "sentence": "She felt a twinge of pain in her ankle after running.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Backpack",
+        "sentence": "He carried his books in a backpack.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Lighthouse",
+        "sentence": "The lighthouse guided boats near the shore.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Playground",
+        "sentence": "The children ran across the playground.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Notebook",
+        "sentence": "She wrote her ideas in a notebook.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Thunderstorm",
+        "sentence": "We stayed indoors during the thunderstorm.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Waterfall",
+        "sentence": "The waterfall splashed into a deep pool.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Toothbrush",
+        "sentence": "I put my toothbrush beside the sink.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Sunflower",
+        "sentence": "A sunflower grew beside the fence.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Upstairs",
+        "sentence": "Her bedroom is upstairs.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Cupboard",
+        "sentence": "The plates are in the kitchen cupboard.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Handkerchief",
+        "sentence": "He carried a clean handkerchief in his pocket.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Sandwich",
+        "sentence": "I packed a cheese sandwich for lunch.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Bicycle",
+        "sentence": "My bicycle has a bright red bell.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Calendar",
+        "sentence": "Mark the competition date on the calendar.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      },
+      {
+        "word": "Separate",
+        "sentence": "Keep the clean papers separate from the used ones.",
+        "origin": "Pattern drill · Compounds & everyday traps",
+        "pattern": "everyday"
+      }
+    ]
+  }
+]
